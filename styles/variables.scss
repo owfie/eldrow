@@ -13,7 +13,7 @@ $dark: #26262F;
 $light: #FFFEF3;
 
 @mixin shadow {
-  filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.10)); 
+  filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.15)); 
 }
 
 @mixin unselectable {

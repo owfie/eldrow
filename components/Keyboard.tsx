@@ -37,5 +37,5 @@ const Key: React.FC<KeyProps> = (props) => {
 
   const pressed = key === letter
 
-  return <div className={`${styles.Key} ${pressed && styles.active}`}>{letter}</div>
+  return <div key={key}className={`${styles.Key} ${pressed && styles.active}`}>{letter}</div>
 }

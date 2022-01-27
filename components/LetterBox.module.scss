@@ -1,5 +1,6 @@
 .LetterBox {
-@include shadow;
+  @include shadow;
+  @include unselectable;
 
   font-size: 3em;
   height: 1em;
@@ -11,8 +12,8 @@
   background-color: $dark;
   color: white;
 
-  border: 10px solid white;
-  border-bottom: 60px solid white;
+  border: 0.2em solid white;
+  border-bottom: 1em solid white;
 
   &.yes {
     color: $yes;

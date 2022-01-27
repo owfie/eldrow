@@ -1,3 +1,4 @@
+import React from 'react'
 import styles from './LetterBox.module.scss'
 
 interface LetterBoxProps {
@@ -22,6 +23,10 @@ export const LetterBox: React.FC<LetterBoxProps> = (props) => {
 }
 
 export const WordBox: React.FC<LetterBoxProps> = (props) => {
+
+  const [cursorPosition, setCursorPosition] = React.useState(0)
+  
+
   const {children} = props
   return <div className={styles.WordBox}>{children}</div>
 }
