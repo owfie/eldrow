@@ -1,0 +1,26 @@
+.LetterBox {
+  font-size: 3em;
+  height: 1em;
+  width: 1em;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.yes {
+    background-color: $yes;
+  }
+
+  &.almost {
+    background-color: $almost;
+  }
+
+  &.no {
+    background-color: $no;
+  }
+}
+
+.WordBox {
+  display: flex;
+  flex-direction: row;
+}
