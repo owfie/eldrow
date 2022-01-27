@@ -1,0 +1,59 @@
+.Keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.5em;
+  }
+}
+
+@mixin pressed {
+  transform: scale(0.9);
+}
+
+@mixin hover {
+  background-color: darken($dark, 30%);
+}
+
+.Key {
+@include shadow;
+@include unselectable;
+cursor: pointer;
+
+  font-size: 2em;
+  width: 1em;
+  height: 1em;
+  padding: 1em;
+
+  text-transform: capitalize;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: $dark;
+  color: white;
+  border: 5px solid white;
+  border-radius: 3em;
+
+  &:active {
+    @include pressed;
+  }
+
+  &.active {
+    @include pressed;
+    @include hover;
+  }
+
+  &:hover {
+    @include hover;
+  }
+
+  margin-right: 0.5em;
+  &:last-child {
+    margin-right: 0;
+  }
+}

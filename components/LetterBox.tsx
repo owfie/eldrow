@@ -5,7 +5,7 @@ interface LetterBoxProps {
   grade?: Grade
 }
 
-type Grade = 'yes' | 'almost' | 'no' | undefined
+export type Grade = 'yes' | 'almost' | 'no' | undefined
 
 const getGradeClassName = (grade: Grade) => {
   switch(grade) {
