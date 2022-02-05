@@ -1,4 +1,4 @@
-import { PressedKeyContext } from 'pages'
+import { PressedKeyContext } from 'components/KeyProvider'
 import React from 'react'
 import styles from './Keyboard.module.scss'
 import { Grade } from './LetterBox'

@@ -13,7 +13,8 @@ const secret = 'react'
 
 type word = string[]
 type attempts = word[]
-
+type focusIndex = number
+type input = string[]
 
 const Home: NextPage = () => {
 
@@ -24,11 +25,11 @@ const Home: NextPage = () => {
     
     <div className={styles.Home}>
       <Head>
-        <title>eldroW</title>
+        <title>Eldrow</title>
       </Head>
       <div className={styles.header}>
-      <h1>eldroW</h1>
-<div>Settings</div>
+      <h1>Eldrow</h1>
+      <div>Settings</div>
       </div>
       
       <KeyProvider>
