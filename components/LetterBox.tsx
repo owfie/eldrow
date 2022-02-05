@@ -5,6 +5,7 @@ interface LetterBoxProps {
   children?: React.ReactNode
   grade?: Grade
   focused?: boolean
+  onClick?: () => void
 }
 
 export type Grade = 'yes' | 'almost' | 'no' | undefined
@@ -19,7 +20,7 @@ const getGradeClassName = (grade: Grade) => {
 }
 
 export const LetterBox: React.FC<LetterBoxProps> = (props) => {
-  const {children, grade, focused} = props
+  const {children, grade, focused, onClick} = props
 
   const [blinking, setBlinking] = React.useState(focused)
 
@@ -29,7 +30,7 @@ export const LetterBox: React.FC<LetterBoxProps> = (props) => {
     }, 700)
   }, [blinking, setBlinking])
 
-  return <div className={`${styles.LetterBox} ${getGradeClassName(grade)}`}>
+  return <div onClick={onClick} className={`${styles.LetterBox} ${getGradeClassName(grade)}`}>
     {children}
     {focused && blinking && <div className={styles.focused}></div>}
   </div>

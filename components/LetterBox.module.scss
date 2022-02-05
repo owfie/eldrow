@@ -2,7 +2,9 @@
   @include shadow;
   @include unselectable;
 
-  cursor: text;
+  // cursor: text;
+
+  text-transform: uppercase;
 
   font-size: 3em;
   height: 1em;
