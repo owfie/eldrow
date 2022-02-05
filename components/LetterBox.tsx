@@ -4,6 +4,7 @@ import styles from './LetterBox.module.scss'
 interface LetterBoxProps {
   children?: React.ReactNode
   grade?: Grade
+  focused?: boolean
 }
 
 export type Grade = 'yes' | 'almost' | 'no' | undefined
@@ -12,14 +13,26 @@ const getGradeClassName = (grade: Grade) => {
   switch(grade) {
     case 'yes': return styles.yes
     case 'almost': return styles.almost
-    case 'no': return styles.no
+    case 'no': return styles.inactive
     default: return undefined
   }
 }
 
 export const LetterBox: React.FC<LetterBoxProps> = (props) => {
-  const {children, grade} = props
-  return <div className={`${styles.LetterBox} ${getGradeClassName(grade)}`}>{children}</div>
+  const {children, grade, focused} = props
+
+  const [blinking, setBlinking] = React.useState(focused)
+
+  React.useLayoutEffect(() => {
+    setTimeout(() => {
+      setBlinking(blinking => !blinking)
+    }, 700)
+  }, [blinking, setBlinking])
+
+  return <div className={`${styles.LetterBox} ${getGradeClassName(grade)}`}>
+    {children}
+    {focused && blinking && <div className={styles.focused}></div>}
+  </div>
 }
 
 export const WordBox: React.FC<LetterBoxProps> = (props) => {

@@ -8,9 +8,10 @@ $blue: #20BDA1;
 
 $yes: $green;
 $almost: $yellow;
+$inactive: #B8C5C5;
 
 $dark: #26262F;
-$light: #FFFEF3;
+$light: #FFFFFB;
 
 @mixin shadow {
   filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.15)); 

@@ -2,6 +2,8 @@
   @include shadow;
   @include unselectable;
 
+  cursor: text;
+
   font-size: 3em;
   height: 1em;
   width: 1em;
@@ -10,17 +12,38 @@
   align-items: center;
   justify-content: center;
   background-color: $dark;
-  color: white;
+  color: rgb(255, 255, 255);
 
-  border: 0.2em solid white;
+  border: 0.25em solid white;
   border-bottom: 1em solid white;
 
+  // &::after {
+  //   content: "";
+  //   border-bottom: 1px solid white;
+  //   width: 100px !important;
+  // }
+
+  .focused {
+    background-color:white;
+    width: 1em;
+    height: 2px;
+    position: absolute;
+    bottom: 0.5em;
+  }
+
   &.yes {
-    color: $yes;
+    background-color: $yes;
+    cursor: default;
   }
 
   &.almost {
-    color: $almost;
+    cursor: default;
+    background-color: $almost;
+  }
+
+  &.inactive {
+    cursor: default;
+    background-color: $inactive;
   }
 
   margin-right: 0.5em;
