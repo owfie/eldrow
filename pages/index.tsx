@@ -6,7 +6,12 @@ import { LetterBox, WordBox } from '../components/LetterBox'
 import styles from './Home.module.scss'
 
 const lettersPerWord = 5
-const wordsPerRound = 5
+const wordsPerRound = 6
+
+const secret = 'react'
+
+type word = string[]
+type attempts = word[]
 
 export const PressedKeyContext = React.createContext<string | undefined>(undefined)
 
@@ -27,7 +32,6 @@ const Home: NextPage = () => {
     document.addEventListener("keydown", handleKeyPress, false);
     document.addEventListener("keyup", handleKeyRelease, false);
 
-
     return () => {
       document.removeEventListener("keydown", handleKeyPress, false);
 
@@ -39,20 +43,20 @@ const Home: NextPage = () => {
     
     <div className={styles.Home}>
       <Head>
-        <title>Eldrow</title>
+        <title>eldroW</title>
       </Head>
       <div className={styles.header}>
-      <h1>Eldrow</h1>
+      <h1>eldroW</h1>
 <div>Settings</div>
       </div>
       
       <PressedKeyContext.Provider value={pressedKey}>
         <WordBox>
-          <LetterBox grade={'yes'}>H</LetterBox>
-          <LetterBox grade={'no'}>E</LetterBox>
-          <LetterBox grade={'almost'}>L</LetterBox>
-          <LetterBox >L</LetterBox>
-          <LetterBox >O</LetterBox>
+          <LetterBox grade={'yes'}></LetterBox>
+          <LetterBox grade={'no'}></LetterBox>
+          <LetterBox grade={'almost'}></LetterBox>
+          <LetterBox focused ></LetterBox>
+          <LetterBox ></LetterBox>
         </WordBox>
         <Keyboard />
       </PressedKeyContext.Provider>
