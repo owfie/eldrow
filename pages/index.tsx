@@ -1,4 +1,5 @@
 import { Keyboard } from 'components/Keyboard'
+import {KeyProvider} from 'components/KeyProvider'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import React from 'react'
@@ -13,31 +14,11 @@ const secret = 'react'
 type word = string[]
 type attempts = word[]
 
-export const PressedKeyContext = React.createContext<string | undefined>(undefined)
 
 const Home: NextPage = () => {
 
-  const [pressedKey, setPressedKey] = React.useState<string | undefined>(undefined)
 
-  const handleKeyPress = React.useCallback((e: KeyboardEvent) => {
-    const letter = e.key
-    setPressedKey(letter)
-  }, [])
-
-  const handleKeyRelease = React.useCallback(() => {
-    setPressedKey(undefined)
-  }, [])
-
-  React.useEffect(() => {
-    document.addEventListener("keydown", handleKeyPress, false);
-    document.addEventListener("keyup", handleKeyRelease, false);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress, false);
-
-      document.removeEventListener("keyup", handleKeyRelease, false);
-    };
-  }, [handleKeyPress, handleKeyRelease]);
+  
 
   return (
     
@@ -50,7 +31,7 @@ const Home: NextPage = () => {
 <div>Settings</div>
       </div>
       
-      <PressedKeyContext.Provider value={pressedKey}>
+      <KeyProvider>
         <WordBox>
           <LetterBox grade={'yes'}></LetterBox>
           <LetterBox grade={'no'}></LetterBox>
@@ -59,7 +40,7 @@ const Home: NextPage = () => {
           <LetterBox ></LetterBox>
         </WordBox>
         <Keyboard />
-      </PressedKeyContext.Provider>
+      </KeyProvider>
     </div>
   )
 }
