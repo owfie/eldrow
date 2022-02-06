@@ -24,7 +24,7 @@ export const LetterBox: React.FC<LetterBoxProps> = (props) => {
 
   const [blinking, setBlinking] = React.useState(focused)
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     setTimeout(() => {
       setBlinking(blinking => !blinking)
     }, 700)

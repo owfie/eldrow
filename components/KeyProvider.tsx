@@ -1,14 +1,23 @@
 import React from "react"
 
-export const PressedKeyContext = React.createContext<string | undefined>(undefined)
+interface KeyContextShape {
+  activeKey: string | undefined
+  pressedKey: string | undefined
+  releaseKey: () => void
+}
+
+export const alphabet = ['q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m','Backspace','Enter']
+
+export const PressedKeyContext = React.createContext<KeyContextShape>({activeKey: undefined, pressedKey: undefined, releaseKey: () => {}})
 
 export const KeyProvider: React.FC = ({children}) => {
 
   const [pressedKey, setPressedKey] = React.useState<string | undefined>(undefined)
+  const [activeKey, setActiveKey] = React.useState<string | undefined>(undefined)
 
   const handleKeyPress = React.useCallback((e: KeyboardEvent) => {
     const letter = e.key
-    setPressedKey(letter)
+    if (alphabet.includes(letter)) setPressedKey(letter)
   }, [])
 
   const handleKeyRelease = React.useCallback(() => {
@@ -26,5 +35,5 @@ export const KeyProvider: React.FC = ({children}) => {
     };
   }, [handleKeyPress, handleKeyRelease]);
 
-  return <PressedKeyContext.Provider value={pressedKey}>{children}</PressedKeyContext.Provider>
+  return <PressedKeyContext.Provider value={{activeKey, pressedKey, releaseKey: () => setPressedKey(undefined)}}>{children}</PressedKeyContext.Provider>
 }

@@ -41,52 +41,80 @@ const Home: NextPage = () => {
 
 export const Game: React.FC = () => {
 
-  const [attempts, setAttempts] = React.useState<attempts>([])
-  const [word, setWord] = React.useState<word>(['', '', '', '', ''])
+  const [attempts, setAttempts] = React.useState<attempts>([['t','r','a','c','k']])
   const [input, setInput] = React.useState<input>(['', '', '', '', ''])
   const [focusIndex, setFocusIndex] = React.useState<focusIndex>(0)
 
-  const activeKey = React.useContext(PressedKeyContext)
+  const {pressedKey: activeKey, releaseKey} = React.useContext(PressedKeyContext)
 
   const dispatchBackspace = React.useCallback(() => {
-    setInput(input => {
-      const newInput = [...input]
-      newInput[focusIndex] = ''
-      return newInput
-    })
-    if (focusIndex > 0) {
-      setFocusIndex(focusIndex => focusIndex - 1)
+    if (focusIndex <= lettersPerWord) {
+      if (focusIndex === lettersPerWord || (input[focusIndex] === '' && focusIndex > 0)) {
+        setInput(input => {
+          const newInput = [...input]
+          newInput[focusIndex-1] = ''
+          return newInput
+        })
+        setFocusIndex(focusIndex => focusIndex - 1)
+      } else {
+        setInput(input => {
+          const newInput = [...input]
+          newInput[focusIndex] = ''
+          return newInput
+        })
+      }
     }
-  }, [focusIndex])
+  }, [focusIndex, input])
 
   const dispatchInput = React.useCallback((key: string) => {
-    setInput(input => {
-      const newInput = [...input]
-      newInput[focusIndex] = key
-      return newInput
-    })
-    if (focusIndex < lettersPerWord - 1) {
-      setFocusIndex(focusIndex => focusIndex + 1)
+    if (focusIndex < lettersPerWord) {
+      setInput(input => {
+        const newInput = [...input]
+        newInput[focusIndex] = key
+        return newInput
+      })
     }
-  }, [focusIndex, setFocusIndex])
+  }, [focusIndex])
 
   React.useEffect(() => {
     if (activeKey) {
 
       if (activeKey === 'Backspace') {
         dispatchBackspace()
+        releaseKey()
+
       } else if(activeKey === 'Enter') {
         // submit
         alert('submit')
 
       } else {
         dispatchInput(activeKey)
+        releaseKey()
+        if (focusIndex < lettersPerWord) {
+          setFocusIndex(focusIndex => focusIndex + 1)
+        }
       }
     }
-  }, [activeKey, dispatchInput, dispatchBackspace])
+  }, [activeKey, dispatchInput, dispatchBackspace, releaseKey])
+
+  const getGrade = (letter: string, position: number) => {
+    if (secret[position] === letter) return 'yes'
+    if (secret.includes(letter)) return 'almost'
+    return 'no'
+  }
 
   return (
     <div>
+      <h1>{input}</h1>
+      {attempts.map((word, index) => (
+        <WordBox key={index}>
+          {word.map((letter, index) => (
+            <LetterBox key={index} grade={getGrade(letter, index)}>
+              {letter}
+            </LetterBox>
+          ))}
+        </WordBox>
+      ))}
       <WordBox>
           {input.map((letter, i) => {
             return <LetterBox onClick={() => setFocusIndex(i)} key={`input-${i}`} focused={focusIndex===i}>

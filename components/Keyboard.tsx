@@ -41,9 +41,9 @@ interface KeyProps {
 const Key: React.FC<KeyProps> = (props) => {
   const { keyName: letter, override } = props
 
-  const key = React.useContext(PressedKeyContext)
+  const { pressedKey: key } = React.useContext(PressedKeyContext)
 
   const pressed = key === letter
 
-  return <div key={key}className={`${styles.Key} ${pressed && styles.active}`}>{override ?? letter}</div>
+  return <div key={letter} className={`${styles.Key} ${pressed && styles.active}`}>{override ?? letter}</div>
 }

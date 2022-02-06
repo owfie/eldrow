@@ -2,7 +2,7 @@
   @include shadow;
   @include unselectable;
 
-  // cursor: text;
+  cursor: text;
 
   text-transform: uppercase;
 
@@ -58,4 +58,5 @@
 .WordBox {
   display: flex;
   flex-direction: row;
+  margin-bottom: 2em;
 }
