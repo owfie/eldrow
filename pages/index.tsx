@@ -18,7 +18,6 @@ type focusIndex = number
 type input = string[]
 
 const Home: NextPage = () => {
-  const [gameOver, setGameOver] = React.useState(false)
 
   return (
     
@@ -32,7 +31,7 @@ const Home: NextPage = () => {
       </div>
       
       <KeyProvider>
-        {!gameOver && <Game />}
+        <Game />
         <Keyboard />
       </KeyProvider>
     </div>
@@ -91,6 +90,7 @@ export const Game: React.FC = () => {
     // if word is the secret, end the game
     if (word.join('') === secret) {
       alert('you won!')
+      setGameOver(true)
       // end game
     }
   
@@ -162,12 +162,11 @@ export const Game: React.FC = () => {
     return 'no'
   }
 
+  const [gameOver, setGameOver] = React.useState(false)
+
   return (
     <div>
-      <h1>{input}</h1>
-      <pre>{JSON.stringify(attempts)}</pre>
       {attempts.map((attempt, index) => {
-        // split string attempt into letters and save in a variable call word
         const word = attempt.split('')
         return <WordBox key={index}>
           {word.map((letter, index) => (
@@ -177,6 +176,7 @@ export const Game: React.FC = () => {
           ))}
         </WordBox>
       })}
+      {!gameOver && 
       <WordBox>
           {input.map((letter, i) => {
             return <LetterBox onClick={() => setFocusIndex(i)} key={`input-${i}`} focused={focusIndex===i}>
@@ -184,6 +184,7 @@ export const Game: React.FC = () => {
             </LetterBox>
           })}
         </WordBox>
+      }
     </div>
   )
 }

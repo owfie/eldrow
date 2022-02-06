@@ -19,18 +19,27 @@ const getGradeClassName = (grade: Grade) => {
   }
 }
 
+const getRandomRotationStyle = () => {
+  return {
+    transform: `rotate(${Math.floor(Math.random() * 20 - 10)}deg)`,
+    transition: 'transform 0.2s ease-in-out'
+  }
+}
+
 export const LetterBox: React.FC<LetterBoxProps> = (props) => {
   const {children, grade, focused, onClick} = props
 
   const [blinking, setBlinking] = React.useState(focused)
 
   React.useEffect(() => {
-    setTimeout(() => {
-      setBlinking(blinking => !blinking)
-    }, 700)
-  }, [blinking, setBlinking])
+    if (focused) {
+      setTimeout(() => {
+        setBlinking(blinking => !blinking)
+      }, 700)
+    }
+  }, [blinking, setBlinking, focused])
 
-  return <div onClick={onClick} className={`${styles.LetterBox} ${getGradeClassName(grade)}`}>
+  return <div style={grade !== 'no' && grade ? getRandomRotationStyle() : undefined} onClick={onClick} className={`${styles.LetterBox} ${getGradeClassName(grade)}`}>
     {children}
     {focused && blinking && <div className={styles.focused}></div>}
   </div>
