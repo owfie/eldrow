@@ -5,6 +5,7 @@ import Head from 'next/head'
 import React from 'react'
 import { LetterBox, WordBox } from '../components/LetterBox'
 import styles from './Home.module.scss'
+import { words } from '../words'
 
 const lettersPerWord = 5
 const wordsPerRound = 6
@@ -12,12 +13,11 @@ const wordsPerRound = 6
 const secret = 'react'
 
 type word = string[]
-type attempts = word[]
+type attempts = string[]
 type focusIndex = number
 type input = string[]
 
 const Home: NextPage = () => {
-
   const [gameOver, setGameOver] = React.useState(false)
 
   return (
@@ -39,13 +39,70 @@ const Home: NextPage = () => {
   )
 }
 
+// import fs from 'fs'
+
+// export async function getStaticProps() {
+
+//   const path = process.cwd()
+
+//   const filePath = path + '/swords.txt'
+//   const exportPath = path + '/words.ts'
+
+//   const words = fs.readFileSync(filePath, 'utf8').split('\n')
+
+//   fs.writeFileSync(exportPath, `export const words = ${JSON.stringify(words)}`)
+//   return {
+//     props: {
+//     },
+//   };
+// }
+// 
 export const Game: React.FC = () => {
 
-  const [attempts, setAttempts] = React.useState<attempts>([['t','r','a','c','k']])
+  const [attempts, setAttempts] = React.useState<attempts>([])
   const [input, setInput] = React.useState<input>(['', '', '', '', ''])
   const [focusIndex, setFocusIndex] = React.useState<focusIndex>(0)
 
   const {pressedKey: activeKey, setKey} = React.useContext(PressedKeyContext)
+
+  const submitWord = React.useCallback((word: word) => {
+
+    // if word contains an empty string, it's not a valid word
+    if (word.includes('')) {
+      alert('incomplete word')
+      return
+    }
+
+    // if word is already in the attempts, it's not a valid word
+    if (attempts.includes(word.join(''))) {
+      alert('already tried that')
+      return
+    }
+
+    // if word is not in the words list, it's not a valid word
+    if (!words.includes(word.join(''))) {
+      alert('not a valid word')
+      return
+    }
+
+    // if word is valid, add it to the attempts
+    setAttempts(attempts => [...attempts, word.join('')])
+
+    // if word is the secret, end the game
+    if (word.join('') === secret) {
+      alert('you won!')
+      // end game
+    }
+  
+    // set input to empty
+    setInput(input => {
+      const newInput = [...input]
+      newInput.fill('')
+      return newInput
+    })
+    // set focus to 0
+    setFocusIndex(0)
+  },[attempts])
 
   const dispatchBackspace = React.useCallback(() => {
     if (focusIndex <= lettersPerWord) {
@@ -85,7 +142,9 @@ export const Game: React.FC = () => {
 
       } else if(activeKey === 'Enter') {
         // submit
-        alert('submit')
+        submitWord(input)
+        setKey(undefined)
+
 
       } else {
         dispatchInput(activeKey)
@@ -95,7 +154,7 @@ export const Game: React.FC = () => {
         }
       }
     }
-  }, [activeKey, dispatchInput, dispatchBackspace, setKey, focusIndex])
+  }, [activeKey, dispatchInput, dispatchBackspace, setKey, focusIndex, input, submitWord])
 
   const getGrade = (letter: string, position: number) => {
     if (secret[position] === letter) return 'yes'
@@ -106,15 +165,18 @@ export const Game: React.FC = () => {
   return (
     <div>
       <h1>{input}</h1>
-      {attempts.map((word, index) => (
-        <WordBox key={index}>
+      <pre>{JSON.stringify(attempts)}</pre>
+      {attempts.map((attempt, index) => {
+        // split string attempt into letters and save in a variable call word
+        const word = attempt.split('')
+        return <WordBox key={index}>
           {word.map((letter, index) => (
             <LetterBox key={index} grade={getGrade(letter, index)}>
               {letter}
             </LetterBox>
           ))}
         </WordBox>
-      ))}
+      })}
       <WordBox>
           {input.map((letter, i) => {
             return <LetterBox onClick={() => setFocusIndex(i)} key={`input-${i}`} focused={focusIndex===i}>
