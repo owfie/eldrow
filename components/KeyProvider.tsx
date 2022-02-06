@@ -3,12 +3,12 @@ import React from "react"
 interface KeyContextShape {
   activeKey: string | undefined
   pressedKey: string | undefined
-  releaseKey: () => void
+  setKey: (key?: string) => void
 }
 
 export const alphabet = ['q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m','Backspace','Enter']
 
-export const PressedKeyContext = React.createContext<KeyContextShape>({activeKey: undefined, pressedKey: undefined, releaseKey: () => {}})
+export const PressedKeyContext = React.createContext<KeyContextShape>({activeKey: undefined, pressedKey: undefined, setKey: () => {}})
 
 export const KeyProvider: React.FC = ({children}) => {
 
@@ -35,5 +35,5 @@ export const KeyProvider: React.FC = ({children}) => {
     };
   }, [handleKeyPress, handleKeyRelease]);
 
-  return <PressedKeyContext.Provider value={{activeKey, pressedKey, releaseKey: () => setPressedKey(undefined)}}>{children}</PressedKeyContext.Provider>
+  return <PressedKeyContext.Provider value={{activeKey, pressedKey, setKey: (key) => setPressedKey(key)}}>{children}</PressedKeyContext.Provider>
 }

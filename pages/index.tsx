@@ -45,7 +45,7 @@ export const Game: React.FC = () => {
   const [input, setInput] = React.useState<input>(['', '', '', '', ''])
   const [focusIndex, setFocusIndex] = React.useState<focusIndex>(0)
 
-  const {pressedKey: activeKey, releaseKey} = React.useContext(PressedKeyContext)
+  const {pressedKey: activeKey, setKey} = React.useContext(PressedKeyContext)
 
   const dispatchBackspace = React.useCallback(() => {
     if (focusIndex <= lettersPerWord) {
@@ -81,7 +81,7 @@ export const Game: React.FC = () => {
 
       if (activeKey === 'Backspace') {
         dispatchBackspace()
-        releaseKey()
+        setKey(undefined)
 
       } else if(activeKey === 'Enter') {
         // submit
@@ -89,13 +89,13 @@ export const Game: React.FC = () => {
 
       } else {
         dispatchInput(activeKey)
-        releaseKey()
+        setKey(undefined)
         if (focusIndex < lettersPerWord) {
           setFocusIndex(focusIndex => focusIndex + 1)
         }
       }
     }
-  }, [activeKey, dispatchInput, dispatchBackspace, releaseKey])
+  }, [activeKey, dispatchInput, dispatchBackspace, setKey, focusIndex])
 
   const getGrade = (letter: string, position: number) => {
     if (secret[position] === letter) return 'yes'
