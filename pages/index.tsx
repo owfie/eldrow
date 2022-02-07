@@ -154,21 +154,32 @@ const getWinHint = (livesLeft: number) => {
   }
 }
 
+type Hint = {
+  text: string
+  hidden: boolean
+}
+
 export const Game: React.FC = () => {
 
   const [attempts, setAttempts] = React.useState<attempts>([])
   const [input, setInput] = React.useState<input>(['', '', '', '', ''])
   const [focusIndex, setFocusIndex] = React.useState<focusIndex>(0)
-  const [hint, setHint] = React.useState<string | null>(null)
+  const [hint, setHint] = React.useState<Hint | undefined>(undefined)
 
   const {gameOver, setGameOver} = React.useContext(GameContext)
   const {pressedKey: activeKey, setKey} = React.useContext(PressedKeyContext)
 
   React.useEffect(() => {
-    if (hint) {
+    if (activeKey) {
+      setHint(hint => {return {text: hint?.text ?? '', hidden: true}})
+    }
+  }, [activeKey])
+
+  React.useEffect(() => {
+    if (hint && hint.text !== '') {
       setTimeout(() => {
-        setHint(null)
-      }, 2000)
+        setHint(hint => {return {text: hint?.text ?? '', hidden: true}})
+      }, 5000)
     }
   }, [hint, setHint])
 
@@ -176,19 +187,19 @@ export const Game: React.FC = () => {
 
     // If word contains an empty string, it's not a valid word.
     if (word.includes('')) {
-      setHint('Looks like you\'ve missed a letter.')
+      setHint({text: 'Looks like you\'ve missed a letter.', hidden: false})
       return
     }
 
     // If word is already in the attempts, it's not a valid word.
     if (attempts.includes(word.join(''))) {
-      setHint('You\'ve already tried that.')
+      setHint({text: 'You\'ve already tried that.', hidden: false})
       return
     }
 
     // If word is not in the words list, it's not a valid word.
     if (!words.includes(word.join(''))) {
-      setHint('Are you sure that\'s a word?')
+      setHint({text: 'Are you sure that\'s a word?', hidden: false})
       return
     }
 
@@ -198,7 +209,7 @@ export const Game: React.FC = () => {
     // If word is the secret, end the game.
     if (word.join('') === secret) {
       setGameOver(true)
-      setHint(getWinHint(wordsPerRound - attempts.length))
+      setHint({text: getWinHint(wordsPerRound - attempts.length), hidden: false})
     }
   
     setInput(input => {
@@ -281,9 +292,9 @@ export const Game: React.FC = () => {
     <div style={{position:'relative'}}>
       <Flash hidden={!showFlash}/>
       {
-        hint && 
-        <Hint>
-          {hint}
+        hint!==undefined && 
+        <Hint hidden={hint.hidden}>
+          {hint.text}
         </Hint>
       }
       

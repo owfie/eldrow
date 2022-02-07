@@ -7,9 +7,12 @@
   right: 0;
   background-color: #fff;
   opacity: 1;
+  // display:block;
 
   &.hidden {
     opacity: 0;
+    pointer-events: none;
+    // display:none;
     transition: opacity 1.5s ease-in-out;
   }
 }
