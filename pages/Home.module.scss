@@ -6,15 +6,13 @@
   flex-direction: column;
   align-items: center;
 
-  justify-content: space-between;
-
   max-width: 500px;
   margin-left: auto;margin-right:auto;
 
   .divider {
     position: absolute;
     left: 0;
-    top: 100px;
+    top: 15vh;
     width:100vw;
 
     &.hidden {
@@ -30,7 +28,7 @@
     flex-direction: row-reverse;
     align-items: flex-end;
     font-weight: 500;
-    height: 3em;
+    height: 10vh;
     position: relative;
 
     .logo {
@@ -65,10 +63,25 @@
     }
 
     padding-top: 4em;
-    margin-bottom: 2em;
+    margin-bottom: 5vh;
 
     align-items: flex-end;
   }
+}
+
+.page {
+  height: 82.5vh;
+  width: 100%;
+  padding-top: 2.5vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.settings {
+}
+
+.stats {
 }
 
 .about {
@@ -113,4 +126,18 @@
   .heart {
     color: $red;
   }
+}
+
+.game {
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .gameZone {
+    display: flex;
+    flex-direction: column;
+  }
+
+  justify-content: space-between;
 }

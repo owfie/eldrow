@@ -56,62 +56,62 @@ const Home: NextPage = () => {
       }
       {
         currentPage === 'about' &&
-        <>
-        <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
-        <div className={styles.about}>
-          <p>
-            Guess the <b>eldroW</b> in 6 tries!
-          </p>
-          <p>
-            Each guess must be a valid 5 letter word. Hit the enter button to submit.
-          </p>
-          <br />
-          <WordBox>
-            <LetterBox grade={'yes'}>h</LetterBox>
-            <LetterBox grade={'almost'}>e</LetterBox>
-            <LetterBox grade={'no'}>a</LetterBox>
-            <LetterBox grade={'almost'}>v</LetterBox>
-            <LetterBox grade={'no'}>y</LetterBox>
-          </WordBox>
-          <br />
-          <p>After each guess, the color of the tiles will change to show how close your guess was to the word.</p>
-          <br />
-          <div className={styles.hintContainer}>
-            <div className={styles.hint}>
+        <div className={styles.page}>
+          <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
+          <div className={styles.about}>
+            <p>
+              Guess the <b>eldroW</b> in 6 tries!
+            </p>
+            <p>
+              Each guess must be a valid 5 letter word. Hit the enter button to submit.
+            </p>
+            <br />
+            <WordBox>
               <LetterBox grade={'yes'}>h</LetterBox>
-              <p>In the word and in the correct spot.</p>
-            </div>
-            <div className={styles.hint}>
               <LetterBox grade={'almost'}>e</LetterBox>
-              <p>In the word, but in the wrong spot.</p>
-            </div>
-            <div className={styles.hint}>
+              <LetterBox grade={'no'}>a</LetterBox>
+              <LetterBox grade={'almost'}>v</LetterBox>
               <LetterBox grade={'no'}>y</LetterBox>
-              <p>Not in the word at all.</p>
-            </div>  
+            </WordBox>
+            <br />
+            <p>After each guess, the color of the tiles will change to show how close your guess was to the word.</p>
+            <br />
+            <div className={styles.hintContainer}>
+              <div className={styles.hint}>
+                <LetterBox grade={'yes'}>h</LetterBox>
+                <p>In the word and in the correct spot.</p>
+              </div>
+              <div className={styles.hint}>
+                <LetterBox grade={'almost'}>e</LetterBox>
+                <p>In the word, but in the wrong spot.</p>
+              </div>
+              <div className={styles.hint}>
+                <LetterBox grade={'no'}>y</LetterBox>
+                <p>Not in the word at all.</p>
+              </div>  
+            </div>
+            <br />
+            <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p>
           </div>
-          <br />
-          <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p>
+            <Footer />
         </div>
-          <Footer />
-        </>
       }
       {
         currentPage === 'stats' &&
-        <>
+        <div className={styles.page}>
           <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
           <p>Hello world</p>
           <Footer />
-        </>
+        </div>
       }
       {
         currentPage === 'settings' &&
-        <>
+        <div className={styles.page}>
           <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
           <p>Hardcore mode</p>
           <p>Dark mode</p>
           <Footer />
-        </>
+        </div>
       }
     </div>
   )
@@ -147,9 +147,9 @@ const getWinHint = (livesLeft: number) => {
   switch (livesLeft) {
     case 1: return 'Phew!';
     case 2: return 'Nice!';
-    case 3: return 'Good!';
-    case 4: return 'Great!';
-    case 5: return 'Awesome!';
+    case 3: return 'Good job!';
+    case 4: return 'Great work!';
+    case 5: return 'Wow!';
     default: return 'Uhhh... this is awkward.';
   }
 }
@@ -289,7 +289,8 @@ export const Game: React.FC = () => {
   }, [attempts])
 
   return (
-    <div style={{position:'relative'}}>
+    <div className={styles.game} style={{position:'relative'}}>
+      <div></div>
       <Flash hidden={!showFlash}/>
       {
         hint!==undefined && 
@@ -297,27 +298,28 @@ export const Game: React.FC = () => {
           {hint.text}
         </Hint>
       }
-      
-      {attempts.map((attempt, index) => {
-        const word = attempt.split('')
-        return <WordBox key={index}>
-          {word.map((letter, index) => (
-            <LetterBox key={index} grade={getGrade(letter, index)}>
-              {letter}
-            </LetterBox>
-          ))}
-        </WordBox>
-      })}
-      {!gameOver && 
-      <WordBox>
-          {input.map((letter, i) => {
-            return <LetterBox onClick={() => setFocusIndex(i)} key={`input-${i}`} focused={focusIndex===i}>
-              {letter}
-            </LetterBox>
-          })}
-        </WordBox>
-      }
-      <HealthBar />
+      <div className={styles.gameZone}>
+        {attempts.map((attempt, index) => {
+          const word = attempt.split('')
+          return <WordBox key={index}>
+            {word.map((letter, index) => (
+              <LetterBox key={index} grade={getGrade(letter, index)}>
+                {letter}
+              </LetterBox>
+            ))}
+          </WordBox>
+        })}
+        {!gameOver && 
+        <WordBox>
+            {input.map((letter, i) => {
+              return <LetterBox onClick={() => setFocusIndex(i)} key={`input-${i}`} focused={focusIndex===i}>
+                {letter}
+              </LetterBox>
+            })}
+          </WordBox>
+        }
+      </div>
+      {/* <HealthBar /> */}
       <Keyboard />
     </div>
   )
