@@ -20,11 +20,12 @@ type attempts = string[]
 type focusIndex = number
 type input = string[]
 
+type page = 'game' | 'stats' | 'about' | 'settings'
+
 const Home: NextPage = () => {
 
   const {gameOver} = React.useContext(GameContext)
-
-  const [index, setIndex] = React.useState(true)
+  const [currentPage, setCurrentPage] = React.useState<page>('game')
 
   return (
     <div className={styles.Home}>
@@ -33,21 +34,79 @@ const Home: NextPage = () => {
       </Head>
       <div className={styles.header}>
         <div className={styles.logo}> 
-          <h1>eldroW</h1>
-          <Rainbow collapsed={!index} />
+          <a onClick={() => {setCurrentPage('game')}}><h1>eldroW</h1></a>
+          <Rainbow revealDirection='up' collapsed={currentPage !== 'game'} />
         </div>
         <nav>
-          <a onClick={() => {setIndex(index => !index)}}>Stats</a>
-          <a>About</a>
-          <a>Settings</a>
+          <a onClick={() => {setCurrentPage('stats')}}>Stats</a>
+          <a onClick={() => {setCurrentPage('about')}}>About</a>
+          <a onClick={() => {setCurrentPage('settings')}}>Settings</a>
         </nav>
       </div>
-      <Game />
-      {/* {!gameOver ? <Keyboard /> : <div></div>} */}
-      <HealthBar />
-      <Keyboard />
+      <div className={`${styles.divider}`}>
+        <Rainbow collapsed={currentPage === 'game'} revealDirection='right'/>
+      </div>
+      {
+        currentPage === 'game' &&
+        <>
+          <Game />
+          {/* {!gameOver ? <Keyboard /> : <div></div>} */}
+          <HealthBar />
+          <Keyboard />
+        </>
+      }
+      {
+        currentPage === 'about' &&
+        <>
+        <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
+        <div className={styles.about}>
+          <p>
+            Guess the <b>eldroW</b> in 6 tries!
+          </p>
+          <p>
+            Each guess must be a valid 5 letter word. Hit the enter button to submit.
+          </p>
+          <br />
+          <WordBox>
+            <LetterBox grade={'yes'}>h</LetterBox>
+            <LetterBox grade={'almost'}>e</LetterBox>
+            <LetterBox grade={'no'}>a</LetterBox>
+            <LetterBox grade={'almost'}>v</LetterBox>
+            <LetterBox grade={'no'}>y</LetterBox>
+          </WordBox>
+          <br />
+          <p>After each guess, the color of the tiles will change to show how close your guess was to the word.</p>
+          <br />
+          <div className={styles.hintContainer}>
+            <div className={styles.hint}>
+              <LetterBox grade={'yes'}>h</LetterBox>
+              <p>In the word and in the correct spot.</p>
+            </div>
+            <div className={styles.hint}>
+              <LetterBox grade={'almost'}>e</LetterBox>
+              <p>In the word, but in the wrong spot.</p>
+            </div>
+            <div className={styles.hint}>
+              <LetterBox grade={'no'}>y</LetterBox>
+              <p>Not in the word at all.</p>
+            </div>  
+          </div>
+          <br />
+          <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p>
+        </div>
+          <Footer />
+        </>
+      }
+      
     </div>
   )
+}
+
+const Footer = () => {
+  return <div className={styles.footer}>
+    <p>Made with <span className={styles.heart}>❤</span> in Adelaide</p>
+    <p><a href="https://github.com/owfie">Alfie Edgeworth</a></p>
+  </div>
 }
 
 // import fs from 'fs'

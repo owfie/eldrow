@@ -16,6 +16,8 @@
   background-color: $dark;
   color: rgb(255, 255, 255);
 
+  font-weight: 700;
+
   border: 0.25em solid white;
   border-bottom: 1em solid white;
 
@@ -49,14 +51,15 @@
   }
 
   margin-right: 0.5em;
-  &:last-child {
+
+  &:last-of-type {
     margin-right: 0;
   }
-
 }
 
 .WordBox {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   margin-bottom: 1em;
 }

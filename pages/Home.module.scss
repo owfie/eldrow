@@ -11,6 +11,17 @@
   max-width: 500px;
   margin-left: auto;margin-right:auto;
 
+  .divider {
+    position: absolute;
+    left: 0;
+    top: 100px;
+    width:100vw;
+
+    &.hidden {
+
+    }
+  }
+
   .header {
     width: 100%;
     display: flex;
@@ -32,6 +43,7 @@
 
       h1 {
         margin: 0;
+        cursor: pointer;
       }
     }
 
@@ -48,8 +60,53 @@
       }
     }
 
+    padding-top: 4em;
     margin-bottom: 2em;
 
     align-items: flex-end;
+  }
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  .hintContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    .hint {
+      // color: transparentize($color: $dark, $amount: 0.5);
+      width: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      p {
+        margin-top: 1.5em;
+      }
+    }
+  }
+}
+
+.back {
+  align-self: flex-start;
+  cursor: pointer;
+
+  a {
+    cursor: pointer;
+  }
+}
+
+.footer {
+  width: 100%;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .heart {
+    color: $red;
   }
 }
