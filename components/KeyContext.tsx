@@ -17,7 +17,6 @@ export const KeyProvider: React.FC = ({children}) => {
 
   const handleKeyPress = React.useCallback((e: KeyboardEvent) => {
     const letter = e.key
-    console.log('key pressed', letter)
 
     if (alphabet.includes(letter)) {
       setPressedKey(letter)

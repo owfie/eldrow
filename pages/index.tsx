@@ -176,10 +176,11 @@ export const Game: React.FC = () => {
   }, [activeKey])
 
   React.useEffect(() => {
-    if (hint && hint.text !== '') {
-      setTimeout(() => {
+    if (hint && !hint.hidden) {
+
+      setTimeout(() => 
         setHint(hint => {return {text: hint?.text ?? '', hidden: true}})
-      }, 5000)
+      , 5000)
     }
   }, [hint, setHint])
 
