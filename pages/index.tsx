@@ -7,6 +7,8 @@ import { LetterBox, WordBox } from '../components/LetterBox'
 import styles from './Home.module.scss'
 import { words } from '../words'
 import { GameContext } from 'components/GameContext'
+import { HealthBar } from 'components/HealthBar'
+import { Rainbow } from 'components/Rainbow'
 
 const lettersPerWord = 5
 const wordsPerRound = 6
@@ -22,21 +24,27 @@ const Home: NextPage = () => {
 
   const {gameOver} = React.useContext(GameContext)
 
+  const [index, setIndex] = React.useState(true)
+
   return (
     <div className={styles.Home}>
       <Head>
-        <title>Eldrow</title>
+        <title>eldroW</title>
       </Head>
       <div className={styles.header}>
-        <h1>Eldrow</h1>
+        <div className={styles.logo}> 
+          <h1>eldroW</h1>
+          <Rainbow collapsed={!index} />
+        </div>
         <nav>
-          <a>Stats</a>
+          <a onClick={() => {setIndex(index => !index)}}>Stats</a>
           <a>About</a>
           <a>Settings</a>
         </nav>
       </div>
       <Game />
       {/* {!gameOver ? <Keyboard /> : <div></div>} */}
+      <HealthBar />
       <Keyboard />
     </div>
   )
