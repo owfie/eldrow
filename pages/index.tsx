@@ -9,6 +9,8 @@ import { words } from '../words'
 import { GameContext } from 'components/GameContext'
 import { HealthBar } from 'components/HealthBar'
 import { Rainbow } from 'components/Rainbow'
+import { Hint } from 'components/Hint'
+import { Flash } from 'components/Flash'
 
 const lettersPerWord = 5
 const wordsPerRound = 6
@@ -38,9 +40,9 @@ const Home: NextPage = () => {
           <Rainbow revealDirection='up' collapsed={currentPage !== 'game'} />
         </div>
         <nav>
-          <a onClick={() => {setCurrentPage('stats')}}>Stats</a>
-          <a onClick={() => {setCurrentPage('about')}}>About</a>
-          <a onClick={() => {setCurrentPage('settings')}}>Settings</a>
+          <a className={`${currentPage==='stats' && styles.active}`} onClick={() => {setCurrentPage('stats')}}>Stats</a>
+          <a className={`${currentPage==='about' && styles.active}`} onClick={() => {setCurrentPage('about')}}>About</a>
+          <a className={`${currentPage==='settings' && styles.active}`} onClick={() => {setCurrentPage('settings')}}>Settings</a>
         </nav>
       </div>
       <div className={`${styles.divider}`}>
@@ -50,9 +52,6 @@ const Home: NextPage = () => {
         currentPage === 'game' &&
         <>
           <Game />
-          {/* {!gameOver ? <Keyboard /> : <div></div>} */}
-          <HealthBar />
-          <Keyboard />
         </>
       }
       {
@@ -97,7 +96,23 @@ const Home: NextPage = () => {
           <Footer />
         </>
       }
-      
+      {
+        currentPage === 'stats' &&
+        <>
+          <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
+          <p>Hello world</p>
+          <Footer />
+        </>
+      }
+      {
+        currentPage === 'settings' &&
+        <>
+          <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
+          <p>Hardcore mode</p>
+          <p>Dark mode</p>
+          <Footer />
+        </>
+      }
     </div>
   )
 }
@@ -127,33 +142,53 @@ const Footer = () => {
 //   };
 // }
 // 
+
+const getWinHint = (livesLeft: number) => {
+  switch (livesLeft) {
+    case 1: return 'Phew!';
+    case 2: return 'Nice!';
+    case 3: return 'Good!';
+    case 4: return 'Great!';
+    case 5: return 'Awesome!';
+    default: return 'Uhhh... this is awkward.';
+  }
+}
+
 export const Game: React.FC = () => {
 
   const [attempts, setAttempts] = React.useState<attempts>([])
   const [input, setInput] = React.useState<input>(['', '', '', '', ''])
   const [focusIndex, setFocusIndex] = React.useState<focusIndex>(0)
+  const [hint, setHint] = React.useState<string | null>(null)
 
   const {gameOver, setGameOver} = React.useContext(GameContext)
-
   const {pressedKey: activeKey, setKey} = React.useContext(PressedKeyContext)
+
+  React.useEffect(() => {
+    if (hint) {
+      setTimeout(() => {
+        setHint(null)
+      }, 2000)
+    }
+  }, [hint, setHint])
 
   const submitWord = React.useCallback((word: word) => {
 
     // If word contains an empty string, it's not a valid word.
     if (word.includes('')) {
-      alert('incomplete word')
+      setHint('Looks like you\'ve missed a letter.')
       return
     }
 
     // If word is already in the attempts, it's not a valid word.
     if (attempts.includes(word.join(''))) {
-      alert('already tried that')
+      setHint('You\'ve already tried that.')
       return
     }
 
     // If word is not in the words list, it's not a valid word.
     if (!words.includes(word.join(''))) {
-      alert('not a valid word')
+      setHint('Are you sure that\'s a word?')
       return
     }
 
@@ -163,7 +198,7 @@ export const Game: React.FC = () => {
     // If word is the secret, end the game.
     if (word.join('') === secret) {
       setGameOver(true)
-      alert('you won!')
+      setHint(getWinHint(wordsPerRound - attempts.length))
     }
   
     setInput(input => {
@@ -173,7 +208,7 @@ export const Game: React.FC = () => {
     })
 
     setFocusIndex(0)
-  },[attempts])
+  },[attempts, setGameOver])
 
   const dispatchBackspace = React.useCallback(() => {
     if (focusIndex <= lettersPerWord) {
@@ -231,8 +266,27 @@ export const Game: React.FC = () => {
     return 'no'
   }
 
+  const [showFlash, setShowFlash] = React.useState<boolean>(false)
+
+  React.useEffect(() => {
+    if (attempts.length > 0) {
+      setShowFlash(true)
+      setTimeout(() => {
+        setShowFlash(false)
+      }, 100)
+    }
+  }, [attempts])
+
   return (
-    <div>
+    <div style={{position:'relative'}}>
+      <Flash hidden={!showFlash}/>
+      {
+        hint && 
+        <Hint>
+          {hint}
+        </Hint>
+      }
+      
       {attempts.map((attempt, index) => {
         const word = attempt.split('')
         return <WordBox key={index}>
@@ -252,6 +306,8 @@ export const Game: React.FC = () => {
           })}
         </WordBox>
       }
+      <HealthBar />
+      <Keyboard />
     </div>
   )
 }
