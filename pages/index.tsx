@@ -63,17 +63,18 @@ const Home: NextPage = () => {
             <p>
               Each guess must be a valid 5 letter word. Hit the enter button to submit.
             </p>
-            <br />
-            <WordBox>
-              <LetterBox grade={'yes'}>h</LetterBox>
-              <LetterBox grade={'almost'}>e</LetterBox>
-              <LetterBox grade={'no'}>a</LetterBox>
-              <LetterBox grade={'almost'}>v</LetterBox>
-              <LetterBox grade={'no'}>y</LetterBox>
-            </WordBox>
-            <br />
+            <span style={{paddingTop: '1em'}}>
+              <WordBox>
+                <LetterBox grade={'yes'}>h</LetterBox>
+                <LetterBox grade={'almost'}>e</LetterBox>
+                <LetterBox grade={'no'}>a</LetterBox>
+                <LetterBox grade={'almost'}>v</LetterBox>
+                <LetterBox grade={'no'}>y</LetterBox>
+              </WordBox>
+            </span>
+
             <p>After each guess, the color of the tiles will change to show how close your guess was to the word.</p>
-            <br />
+
             <div className={styles.hintContainer}>
               <div className={styles.hint}>
                 <LetterBox grade={'yes'}>h</LetterBox>
@@ -88,7 +89,7 @@ const Home: NextPage = () => {
                 <p>Not in the word at all.</p>
               </div>  
             </div>
-            <br />
+
             <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p>
           </div>
             <Footer />

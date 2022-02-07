@@ -25,9 +25,9 @@ export const Keyboard: React.FC<KeyboardProps> = (props) => {
     <div className={styles.row}>{renderKeys(row1)}</div>
     <div className={styles.row}>{renderKeys(row2)}</div>
     <div className={styles.row}>
-      <span style={{marginRight: '1.5em'}}><Key style={{width: '3em'}} keyName="Enter" override={submit}></Key></span>
+      <span style={{marginRight: '1em'}}><Key style={{width: '3em'}} keyName="Enter" override={submit}></Key></span>
       {renderKeys(row3)}
-      <span style={{marginLeft: '1em', width: '5em'}}><Key style={{width: '3em'}} keyName="Backspace" override={backspace}></Key></span>
+      <span style={{marginLeft: '1em'}}><Key style={{width: '3em'}} keyName="Backspace" override={backspace}></Key></span>
     </div>
   </div>
 }

@@ -6,7 +6,7 @@
 
   text-transform: uppercase;
 
-  font-size: 1.7em;
+  font-size: 1.8em;
   height: 1em;
   width: 1em;
   padding: 1em;
@@ -54,6 +54,13 @@
 
   &:last-of-type {
     margin-right: 0;
+  }
+
+  // for small screens
+  @media (max-height: 650px) {
+    font-size: 1.4em;
+    width: 1em;
+    height: 1em;
   }
 }
 

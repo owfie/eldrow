@@ -72,7 +72,6 @@
   height: 85vh;
   width: 100%;
   padding-top: 5vh;
-  padding-bottom: 5vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -95,15 +94,11 @@
     justify-content: space-evenly;
 
     .hint {
-      // color: transparentize($color: $dark, $amount: 0.5);
+      padding-top:1em;
       width: 100px;
       display: flex;
       flex-direction: column;
       align-items: center;
-
-      p {
-        margin-top: 1.5em;
-      }
     }
   }
 }
@@ -122,6 +117,7 @@
   display:flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-bottom: 5vh;
 
   .heart {
     color: $red;
@@ -129,11 +125,12 @@
 }
 
 .game {
-  height: 84vh;
+  height: 85vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 1vh;
+  padding-bottom: 5vh;
 
   .gameZone {
     display: flex;
