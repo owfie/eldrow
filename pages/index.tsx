@@ -117,8 +117,8 @@ const Home: NextPage = () => {
 
 const Footer = () => {
   return <div className={styles.footer}>
-    <p>Made with <span className={styles.heart}>❤</span> in Adelaide</p>
-    <p><a href="https://github.com/owfie">Alfie Edgeworth</a></p>
+    <div>Made with <span className={styles.heart}>❤</span> in Adelaide</div>
+    <a href="https://github.com/owfie">Alfie Edgeworth</a>
   </div>
 }
 
