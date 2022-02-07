@@ -164,6 +164,8 @@ export const Game: React.FC = () => {
   const [input, setInput] = React.useState<input>(['', '', '', '', ''])
   const [focusIndex, setFocusIndex] = React.useState<focusIndex>(0)
   const [hint, setHint] = React.useState<Hint | undefined>(undefined)
+  const [showFlash, setShowFlash] = React.useState<boolean>(false)
+  const [lives, setLives] = React.useState<number>(wordsPerRound)
 
   const {gameOver, setGameOver} = React.useContext(GameContext)
   const {pressedKey: activeKey, setKey} = React.useContext(PressedKeyContext)
@@ -209,7 +211,18 @@ export const Game: React.FC = () => {
     // If word is the secret, end the game.
     if (word.join('') === secret) {
       setGameOver(true)
-      setHint({text: getWinHint(wordsPerRound - attempts.length), hidden: false})
+      setHint({text: getWinHint(lives), hidden: false})
+      return
+    }
+
+    setLives(lives => lives - 1)
+
+    // If no attempts remaining, end the game.
+    if (attempts.length+1 === wordsPerRound) {
+      setGameOver(true)
+      const outputWord = secret.charAt(0).toUpperCase() + secret.slice(1).toLowerCase()
+      setHint({text: `Game over! The word was ${outputWord}.`, hidden: false})
+      return
     }
   
     setInput(input => {
@@ -277,8 +290,6 @@ export const Game: React.FC = () => {
     return 'no'
   }
 
-  const [showFlash, setShowFlash] = React.useState<boolean>(false)
-
   React.useEffect(() => {
     if (attempts.length > 0) {
       setShowFlash(true)
@@ -291,7 +302,7 @@ export const Game: React.FC = () => {
   return (
     <div className={styles.game} style={{position:'relative'}}>
       <div></div>
-      <Flash hidden={!showFlash}/>
+      {/* <Flash hidden={!showFlash}/> */}
       {
         hint!==undefined && 
         <Hint hidden={hint.hidden}>
@@ -319,7 +330,10 @@ export const Game: React.FC = () => {
           </WordBox>
         }
       </div>
-      <Keyboard />
+      <div className={styles.gui}>
+        <HealthBar total={wordsPerRound} lives={lives}/>
+        <Keyboard />
+      </div>
     </div>
   )
 }

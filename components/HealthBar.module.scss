@@ -1,4 +1,16 @@
 .HealthBar {
+  display: flex;
+  flex-direction: row;
+
   color: $blue;
-  font-size: 3em;
+  font-size: 2em;
+
+  .heart {
+    margin-right: 0.1em;
+    @include shadow;
+  }
+
+  .used {
+    color: $dark;
+  }
 }
