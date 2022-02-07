@@ -50,9 +50,7 @@ const Home: NextPage = () => {
       </div>
       {
         currentPage === 'game' &&
-        <>
-          <Game />
-        </>
+        <Game />
       }
       {
         currentPage === 'about' &&
@@ -320,7 +318,6 @@ export const Game: React.FC = () => {
           </WordBox>
         }
       </div>
-      {/* <HealthBar /> */}
       <Keyboard />
     </div>
   )
