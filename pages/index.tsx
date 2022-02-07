@@ -48,10 +48,9 @@ const Home: NextPage = () => {
       <div className={`${styles.divider}`}>
         <Rainbow collapsed={currentPage === 'game'} revealDirection='right'/>
       </div>
-      {
-        currentPage === 'game' &&
+      <div style={{display:currentPage === 'game' ? 'block' : 'none'}}>
         <Game />
-      }
+      </div>
       {
         currentPage === 'about' &&
         <div className={styles.page}>
