@@ -1,5 +1,5 @@
-import { PressedKeyContext } from 'components/KeyProvider'
-import React from 'react'
+import { PressedKeyContext } from 'components/KeyContext'
+import React, { CSSProperties } from 'react'
 import styles from './Keyboard.module.scss'
 import { Grade } from './LetterBox'
 
@@ -23,12 +23,12 @@ export const Keyboard: React.FC<KeyboardProps> = (props) => {
   
   return <div className={styles.Keyboard}>
     <div className={styles.row}>{renderKeys(row1)}</div>
+    <div className={styles.row}>{renderKeys(row2)}</div>
     <div className={styles.row}>
-      <span style={{marginRight: '4em'}}><Key keyName="Enter" override={submit}></Key></span>
-      {renderKeys(row2)}
-      <span style={{marginLeft: '3.5em'}}><Key keyName="Backspace" override={backspace}></Key></span>
+      <span style={{marginRight: '1.5em'}}><Key style={{width: '3em'}} keyName="Enter" override={submit}></Key></span>
+      {renderKeys(row3)}
+      <span style={{marginLeft: '1em', width: '5em'}}><Key style={{width: '3em'}} keyName="Backspace" override={backspace}></Key></span>
     </div>
-    <div className={styles.row}>{renderKeys(row3)}</div>
   </div>
 }
 
@@ -36,14 +36,15 @@ interface KeyProps {
   keyName: string
   state?: Grade
   override?: string
+  style?: CSSProperties
 }
 
 const Key: React.FC<KeyProps> = (props) => {
-  const { keyName: letter, override } = props
+  const { keyName: letter, override , style} = props
 
   const { pressedKey: key, setKey } = React.useContext(PressedKeyContext)
 
   const pressed = key === letter
 
-  return <div onClick={() => {setKey(letter)}} key={letter} className={`${styles.Key} ${pressed && styles.active}`}>{override ?? letter}</div>
+  return <div style={style} onClick={() => {setKey(letter)}} key={letter} className={`${styles.Key} ${pressed && styles.active}`}>{override ?? letter}</div>
 }

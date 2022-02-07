@@ -1,11 +1,12 @@
 import { Keyboard } from 'components/Keyboard'
-import {KeyProvider, PressedKeyContext} from 'components/KeyProvider'
+import {PressedKeyContext} from 'components/KeyContext'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import React from 'react'
 import { LetterBox, WordBox } from '../components/LetterBox'
 import styles from './Home.module.scss'
 import { words } from '../words'
+import { GameContext } from 'components/GameContext'
 
 const lettersPerWord = 5
 const wordsPerRound = 6
@@ -19,21 +20,24 @@ type input = string[]
 
 const Home: NextPage = () => {
 
+  const {gameOver} = React.useContext(GameContext)
+
   return (
-    
     <div className={styles.Home}>
       <Head>
         <title>Eldrow</title>
       </Head>
       <div className={styles.header}>
-      <h1>Eldrow</h1>
-      <div>Settings</div>
+        <h1>Eldrow</h1>
+        <nav>
+          <a>Stats</a>
+          <a>About</a>
+          <a>Settings</a>
+        </nav>
       </div>
-      
-      <KeyProvider>
-        <Game />
-        <Keyboard />
-      </KeyProvider>
+      <Game />
+      {/* {!gameOver ? <Keyboard /> : <div></div>} */}
+      <Keyboard />
     </div>
   )
 }
@@ -62,45 +66,45 @@ export const Game: React.FC = () => {
   const [input, setInput] = React.useState<input>(['', '', '', '', ''])
   const [focusIndex, setFocusIndex] = React.useState<focusIndex>(0)
 
+  const {gameOver, setGameOver} = React.useContext(GameContext)
+
   const {pressedKey: activeKey, setKey} = React.useContext(PressedKeyContext)
 
   const submitWord = React.useCallback((word: word) => {
 
-    // if word contains an empty string, it's not a valid word
+    // If word contains an empty string, it's not a valid word.
     if (word.includes('')) {
       alert('incomplete word')
       return
     }
 
-    // if word is already in the attempts, it's not a valid word
+    // If word is already in the attempts, it's not a valid word.
     if (attempts.includes(word.join(''))) {
       alert('already tried that')
       return
     }
 
-    // if word is not in the words list, it's not a valid word
+    // If word is not in the words list, it's not a valid word.
     if (!words.includes(word.join(''))) {
       alert('not a valid word')
       return
     }
 
-    // if word is valid, add it to the attempts
+    // If word is valid, add it to the attempts.
     setAttempts(attempts => [...attempts, word.join('')])
 
-    // if word is the secret, end the game
+    // If word is the secret, end the game.
     if (word.join('') === secret) {
-      alert('you won!')
       setGameOver(true)
-      // end game
+      alert('you won!')
     }
   
-    // set input to empty
     setInput(input => {
       const newInput = [...input]
       newInput.fill('')
       return newInput
     })
-    // set focus to 0
+
     setFocusIndex(0)
   },[attempts])
 
@@ -135,34 +139,30 @@ export const Game: React.FC = () => {
 
   React.useEffect(() => {
     if (activeKey) {
-
       if (activeKey === 'Backspace') {
         dispatchBackspace()
         setKey(undefined)
 
       } else if(activeKey === 'Enter') {
-        // submit
-        submitWord(input)
+        if(!gameOver) submitWord(input)
         setKey(undefined)
-
-
+        
       } else {
         dispatchInput(activeKey)
         setKey(undefined)
+
         if (focusIndex < lettersPerWord) {
           setFocusIndex(focusIndex => focusIndex + 1)
         }
       }
     }
-  }, [activeKey, dispatchInput, dispatchBackspace, setKey, focusIndex, input, submitWord])
+  }, [activeKey, dispatchInput, dispatchBackspace, setKey, focusIndex, input, submitWord, gameOver])
 
   const getGrade = (letter: string, position: number) => {
     if (secret[position] === letter) return 'yes'
     if (secret.includes(letter)) return 'almost'
     return 'no'
   }
-
-  const [gameOver, setGameOver] = React.useState(false)
 
   return (
     <div>
