@@ -22,14 +22,18 @@
   .data {
 
     .row {
-      // height: 1em;
+      padding-right: 1em;
+      min-width: 3em;
+
+      text-align: right;
 
       &.active {
         background-color: $dark;
         color: $light;
       }
 
-      padding: 4px 1em;
+      padding-top: 4px;
+      padding-bottom: 4px;
       background-color: $light;
       border-top: 2px solid $dark;
       border-bottom: 2px solid $dark;

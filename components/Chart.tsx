@@ -12,6 +12,9 @@ export const Chart: React.FC<ChartProps> = (props) => {
 
   const {data, active} = props
 
+  // get max value from data
+  const max = Math.max(...data.map(d => d.value))
+
   return (
     <div className={styles.Chart}>
       <div className={styles.axis}>
@@ -21,7 +24,10 @@ export const Chart: React.FC<ChartProps> = (props) => {
       </div>
       <div className={styles.data}>
         {data.map((el, i) => {
-            return <div key={i} className={`${styles.row} ${active === el.label && styles.active}`}>{el.value}</div>
+
+            const barWidth = el.value / max * 300
+
+            return <div key={i} style={{width: barWidth}} className={`${styles.row} ${active === el.label && styles.active}`}>{el.value}</div>
         })}
       </div>
     </div>

@@ -29,19 +29,19 @@ type page = 'game' | 'stats' | 'about'
 const data = [
   {
     label: '1',
-    value: 0
+    value: 1
   }, {
     label: '2',
-    value: 0
+    value: 3
   }, {
     label: '3',
-    value: 0
+    value: 2
   }, {
     label: '4',
-    value: 0
+    value: 1
   }, {
     label: '5',
-    value: 0
+    value: 4
   }, {
     label: '6',
     value: 0
