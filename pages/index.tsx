@@ -12,6 +12,7 @@ import { Rainbow } from 'components/Rainbow'
 import { Hint } from 'components/Hint'
 import { Flash } from 'components/Flash'
 import { Toggle } from 'components/Toggle'
+import { Chart } from 'components/Chart'
 
 const lettersPerWord = 5
 const wordsPerRound = 6
@@ -24,6 +25,28 @@ type focusIndex = number
 type input = string[]
 
 type page = 'game' | 'stats' | 'about'
+
+const data = [
+  {
+    label: '1',
+    value: 0
+  }, {
+    label: '2',
+    value: 0
+  }, {
+    label: '3',
+    value: 0
+  }, {
+    label: '4',
+    value: 0
+  }, {
+    label: '5',
+    value: 0
+  }, {
+    label: '6',
+    value: 0
+  }
+]
 
 const Home: NextPage = () => {
 
@@ -58,8 +81,8 @@ const Home: NextPage = () => {
       {
         currentPage === 'about' &&
         <div className={styles.page}>
-          <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
           <div className={styles.about}>
+            <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
             <h2>About</h2>
             <p>
               Guess the <b>eldroW</b> in 6 tries!
@@ -94,10 +117,7 @@ const Home: NextPage = () => {
               </div>  
             </div>
             <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p>
-          </div>
-          <div className={styles.settings}>
             <h2>Settings</h2>
-
             <div className={styles.toggleBar}>
               <Toggle checked={hardcoreMode} onClick={() => {setHardcoreMode(prev => !prev)}}></Toggle>
               <p>Hardcore Mode</p>
@@ -114,8 +134,32 @@ const Home: NextPage = () => {
       {
         currentPage === 'stats' &&
         <div className={styles.page}>
-          <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
-          <p>Hello world</p>
+          <div className={styles.stats}>
+            <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
+            <h2>Stats</h2>
+            <div className={styles.statRow}>
+              <div className={styles.stat}>
+                <h3>8</h3>
+                <p>Played</p>
+              </div>
+              <div className={styles.stat}>
+                <h3>100</h3>
+                <p>Win %</p>
+              </div>
+              <div className={styles.stat}>
+                <h3>1</h3>
+                <p>Current Streak</p>
+              </div>
+              <div className={styles.stat}>
+                <h3>5</h3>
+                <p>Max Streak</p>
+              </div>
+            </div>
+            <h2>Guess Distribution</h2>
+            <Chart active='1' data={data}/>
+            <h2>21:11:23</h2>
+            <p>Until the next <b>eldroW</b></p>
+          </div>
           <Footer />
         </div>
       }

@@ -4,17 +4,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
 
   padding: 0 2em;
   max-width: 450px;
-  margin-left: auto;margin-right:auto;
+  margin-left: auto;
+  margin-right: auto;
 
   .divider {
     position: absolute;
     left: 0;
     top: 125px;
     width:100vw;
+
+    @media (max-width: 500px) {
+      top: 85px;
+    }
   }
 
   .header {
@@ -28,7 +32,11 @@
     position: relative;
     height: 75px;
     margin-bottom: 25px;
+    flex-shrink: 0;
 
+    @media (max-width: 500px) {
+      height: 60px;
+    }
 
     .logo {
       position:absolute;
@@ -69,21 +77,50 @@
 }
 
 .page {
-  height: 85vh;
+  flex-grow: 1;
   width: 100%;
-  padding-top: 35px;
+  text-align: center;
+  padding-top: 65px;
+
+  @media (max-width: 500px) {
+    padding-top: 35px;
+  }
+
   padding-bottom: 25px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.settings {
+.stats {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  .statRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .stat {
+      h3 {
+        margin: 0;
+        margin-top: 1em;
+      }
+
+      width: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
 }
 
-.stats {
-}
-.settings {
+.about {
+  display: flex;
+  flex-direction: column;
+
   .toggleBar {
     display: flex;
     flex-direction: row;
@@ -95,11 +132,6 @@
 
     width: 200px;
   }
-}
-.about {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 
   .hintContainer {
     display: flex;
@@ -119,6 +151,7 @@
 
 .back {
   align-self: flex-start;
+  margin-bottom: 10px;
   cursor: pointer;
 
   a {
