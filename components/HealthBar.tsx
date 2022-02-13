@@ -10,12 +10,12 @@ export const HealthBar: React.FC<HealthBarProps> = ({lives, total}) => {
 {
   Array(lives).fill(0).map((_, i) => <div key={i} className={styles.heart}>	
   	
-&#10084;</div>)
+    &#9829;</div>)
 }
 {
   Array(total-lives).fill(0).map((_, i) => <div key={i} className={`${styles.used} ${styles.heart}`}>	
   	
-&#10084;</div>)
+    &#9829;</div>)
 }
   </div>
 }

@@ -36,7 +36,7 @@ const Home: NextPage = () => {
       </Head>
       <div className={styles.header}>
         <div className={styles.logo}> 
-          <a onClick={() => {setCurrentPage('game')}}><h1>eldroW</h1></a>
+          <a onClick={() => {setCurrentPage('game')}}>eldroW</a>
           <Rainbow revealDirection='up' collapsed={currentPage !== 'game'} />
         </div>
         <nav>
