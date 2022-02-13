@@ -104,6 +104,18 @@
       align-items: center;
     }
   }
+
+  .toggleBar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    p {
+      margin-left: 25px;
+    }
+
+    width: 200px;
+  }
 }
 
 .back {

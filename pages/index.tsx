@@ -11,6 +11,7 @@ import { HealthBar, Heart } from 'components/HealthBar'
 import { Rainbow } from 'components/Rainbow'
 import { Hint } from 'components/Hint'
 import { Flash } from 'components/Flash'
+import { Toggle } from 'components/Toggle'
 
 const lettersPerWord = 5
 const wordsPerRound = 6
@@ -22,12 +23,15 @@ type attempts = string[]
 type focusIndex = number
 type input = string[]
 
-type page = 'game' | 'stats' | 'about' | 'settings'
+type page = 'game' | 'stats' | 'about'
 
 const Home: NextPage = () => {
 
   const {gameOver} = React.useContext(GameContext)
   const [currentPage, setCurrentPage] = React.useState<page>('game')
+
+  const [hardcoreMode, setHardcoreMode] = React.useState(false)
+  const [darkMode, setDarkMode] = React.useState(false)
 
   return (
     <div className={styles.Home}>
@@ -42,7 +46,6 @@ const Home: NextPage = () => {
         <nav>
           <a className={`${currentPage==='stats' && styles.active}`} onClick={() => {setCurrentPage('stats')}}>Stats</a>
           <a className={`${currentPage==='about' && styles.active}`} onClick={() => {setCurrentPage('about')}}>About</a>
-          <a className={`${currentPage==='settings' && styles.active}`} onClick={() => {setCurrentPage('settings')}}>Settings</a>
         </nav>
       </div>
       <div className={`${styles.divider}`}>
@@ -57,6 +60,7 @@ const Home: NextPage = () => {
         <div className={styles.page}>
           <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
           <div className={styles.about}>
+            <h2>About</h2>
             <p>
               Guess the <b>eldroW</b> in 6 tries!
             </p>
@@ -89,8 +93,18 @@ const Home: NextPage = () => {
                 <p>Not in the word at all.</p>
               </div>  
             </div>
+            <br />
+            <h2>Settings</h2>
 
-            <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p>
+            <div className={styles.toggleBar}>
+              <Toggle checked={hardcoreMode} onClick={() => {setHardcoreMode(prev => !prev)}}></Toggle>
+              <p>Hardcore Mode</p>
+            </div>
+            <div className={styles.toggleBar}>
+              <Toggle checked={darkMode} onClick={() => {setDarkMode(prev => !prev)}}></Toggle>
+              <p>Dark Mode</p>
+            </div>
+            {/* <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p> */}
           </div>
             <Footer />
         </div>
@@ -100,15 +114,6 @@ const Home: NextPage = () => {
         <div className={styles.page}>
           <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
           <p>Hello world</p>
-          <Footer />
-        </div>
-      }
-      {
-        currentPage === 'settings' &&
-        <div className={styles.page}>
-          <a onClick={() => {setCurrentPage('game')}} className={styles.back}>← Back to eldroW</a>
-          <p>Hardcore mode</p>
-          <p>Dark mode</p>
           <Footer />
         </div>
       }
