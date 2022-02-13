@@ -10,7 +10,7 @@ const row2 = ['a','s','d','f','g','h','j','k','l']
 const row3 = ['z','x','c','v','b','n','m']
 
 const backspace = '←'
-const submit = '✓'
+const submit = '⏎'
 
 const renderKeys = (row: string[]) => {
   return row.map((letter, i) => {
@@ -25,7 +25,7 @@ export const Keyboard: React.FC<KeyboardProps> = (props) => {
     <div className={styles.row}>{renderKeys(row1)}</div>
     <div className={styles.row}>{renderKeys(row2)}</div>
     <div className={styles.row}>
-      <span style={{marginRight: '1em'}}><Key style={{width: '3em'}} keyName="Enter" override={submit}></Key></span>
+      <span style={{marginRight: '1.5em'}}><Key style={{width: '3em'}} keyName="Enter" override={submit}></Key></span>
       {renderKeys(row3)}
       <span style={{marginLeft: '1em'}}><Key style={{width: '3em'}} keyName="Backspace" override={backspace}></Key></span>
     </div>

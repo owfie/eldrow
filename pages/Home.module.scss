@@ -4,16 +4,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 
   padding: 0 2em;
-
   max-width: 450px;
   margin-left: auto;margin-right:auto;
 
   .divider {
     position: absolute;
     left: 0;
-    top: 15vh;
+    top: 125px;
     width:100vw;
   }
 
@@ -25,8 +25,9 @@
     flex-direction: row-reverse;
     align-items: flex-end;
     font-weight: 500;
-    height: 10vh;
     position: relative;
+    height: 75px;
+    margin-bottom: 25px;
 
 
     .logo {
@@ -62,7 +63,6 @@
         }
       }
     }
-    margin-bottom: 5vh;
 
     align-items: flex-end;
   }
@@ -71,7 +71,8 @@
 .page {
   height: 85vh;
   width: 100%;
-  padding-top: 5vh;
+  padding-top: 35px;
+  padding-bottom: 25px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -84,8 +85,10 @@
 }
 
 .about {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   text-align: center;
 
   .hintContainer {
@@ -117,7 +120,6 @@
   display:flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-bottom: 5vh;
 
   .heart {
     color: $red;
@@ -125,23 +127,26 @@
 }
 
 .game {
-  height: 85vh;
+  flex-grow: 1;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 5vh;
 
   .gameZone {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
 
   .gui {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 25px;
   }
 
-  justify-content: space-between;
+  flex-direction: column-reverse;
+
 }

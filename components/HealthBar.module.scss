@@ -1,16 +1,45 @@
 .HealthBar {
+  font-size: 32px;
+
   display: flex;
   flex-direction: row;
+  position: relative;
 
   color: $blue;
-  font-size: 2em;
+  margin-bottom: 1em;
 
   .heart {
     margin-right: 0.1em;
-    @include shadow;
+    // @include shadow;
   }
 
   .used {
     color: $dark;
+  }
+}
+
+@font-face {
+  font-family: 'entypo';
+  src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-90/entypo.woff') format('woff');
+}
+
+.heart {
+  font-family: 'entypo', sans-serif;
+  color: $dark;
+  position: relative;
+
+  @include unselectable;
+  @include text-outline;
+
+  &.active {
+    &:before {
+      color: $blue;
+      font-family: 'entypo', sans-serif;
+  
+      content: '♥';
+      position: absolute;
+      top: -4px;
+      left: -2px;
+    }
   }
 }

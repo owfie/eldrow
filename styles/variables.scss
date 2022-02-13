@@ -8,7 +8,7 @@ $blue: #20BDA1;
 
 $yes: $green;
 $almost: $yellow;
-$inactive: #B8C5C5;
+$inactive: #b8c5c5b2;
 
 $dark: #26262F;
 $light: #FFFFFB;
@@ -27,4 +27,12 @@ $light: #FFFFFB;
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
 
+}
+
+@mixin text-outline {
+  -webkit-text-stroke: $dark 2px;
+}
+
+@mixin outline {
+  outline: 1.5px solid $dark;
 }

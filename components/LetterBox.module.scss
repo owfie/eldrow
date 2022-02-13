@@ -1,31 +1,44 @@
 .LetterBox {
-  @include shadow;
+
+
+
+  @include outline;
+  // @include shadow;
   @include unselectable;
+
+  position: relative;
+
+  .inside {
+    @include outline;
+
+    width: 1em;
+    height: 1em;
+    padding: 1em;
+
+    position: absolute;
+    top:0;
+    left:0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   cursor: text;
 
   text-transform: uppercase;
 
-  font-size: 1.8em;
+  font-size: 20px;
   height: 1em;
   width: 1em;
   padding: 1em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  
   background-color: $dark;
-  color: rgb(255, 255, 255);
+  color: $light;
 
   font-weight: 700;
 
-  border: 0.25em solid white;
-  border-bottom: 1em solid white;
-
-  // &::after {
-  //   content: "";
-  //   border-bottom: 1px solid white;
-  //   width: 100px !important;
-  // }
+  border: 5px solid white;
+  border-bottom: 20px solid white;
 
   .focused {
     background-color:white;
@@ -33,24 +46,28 @@
     height: 2px;
     position: absolute;
     bottom: 0.5em;
+    left: 0.5em;
   }
 
   &.yes {
     background-color: $yes;
+    color: $dark;
     cursor: default;
   }
 
   &.almost {
     cursor: default;
+    color: $dark;
     background-color: $almost;
   }
 
   &.inactive {
     cursor: default;
-    background-color: $inactive;
+    color: $dark;
+    background-color: $light;
   }
 
-  margin-right: 0.5em;
+  margin-right: 0.8em;
 
   &:last-of-type {
     margin-right: 0;
@@ -68,5 +85,5 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-bottom: 1em;
+  margin-bottom: 1.6em;
 }

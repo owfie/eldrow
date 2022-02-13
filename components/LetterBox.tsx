@@ -40,7 +40,7 @@ export const LetterBox: React.FC<LetterBoxProps> = (props) => {
   }, [blinking, setBlinking, focused])
 
   return <div style={grade !== 'no' && grade ? getRandomRotationStyle() : undefined} onClick={onClick} className={`${styles.LetterBox} ${getGradeClassName(grade)}`}>
-    {children}
+    <div className={styles.inside}>{children}</div>
     {focused && blinking && <div className={styles.focused}></div>}
   </div>
 }

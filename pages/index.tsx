@@ -7,7 +7,7 @@ import { LetterBox, WordBox } from '../components/LetterBox'
 import styles from './Home.module.scss'
 import { words } from '../words'
 import { GameContext } from 'components/GameContext'
-import { HealthBar } from 'components/HealthBar'
+import { HealthBar, Heart } from 'components/HealthBar'
 import { Rainbow } from 'components/Rainbow'
 import { Hint } from 'components/Hint'
 import { Flash } from 'components/Flash'
@@ -48,9 +48,10 @@ const Home: NextPage = () => {
       <div className={`${styles.divider}`}>
         <Rainbow collapsed={currentPage === 'game'} revealDirection='right'/>
       </div>
-      <div style={{display:currentPage === 'game' ? 'block' : 'none'}}>
+      {
+        currentPage === 'game' &&
         <Game />
-      </div>
+      }
       {
         currentPage === 'about' &&
         <div className={styles.page}>
@@ -117,7 +118,7 @@ const Home: NextPage = () => {
 
 const Footer = () => {
   return <div className={styles.footer}>
-    <div>Made with <span className={styles.heart}>❤</span> in Adelaide</div>
+    <div>Made with <span style={{padding: '0 2px'}}><Heart /></span> in Adelaide</div>
     <a href="https://github.com/owfie">Alfie Edgeworth</a>
   </div>
 }
@@ -300,7 +301,6 @@ export const Game: React.FC = () => {
 
   return (
     <div className={styles.game} style={{position:'relative'}}>
-      <div></div>
       {/* <Flash hidden={!showFlash}/> */}
       {
         hint!==undefined && 
@@ -308,6 +308,10 @@ export const Game: React.FC = () => {
           {hint.text}
         </Hint>
       }
+      <div className={styles.gui}>
+        <HealthBar total={wordsPerRound} lives={lives}/>
+        <Keyboard />
+      </div>
       <div className={styles.gameZone}>
         {attempts.map((attempt, index) => {
           const word = attempt.split('')
@@ -328,10 +332,6 @@ export const Game: React.FC = () => {
             })}
           </WordBox>
         }
-      </div>
-      <div className={styles.gui}>
-        <HealthBar total={wordsPerRound} lives={lives}/>
-        <Keyboard />
       </div>
     </div>
   )
