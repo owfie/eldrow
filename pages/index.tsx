@@ -93,7 +93,9 @@ const Home: NextPage = () => {
                 <p>Not in the word at all.</p>
               </div>  
             </div>
-            <br />
+            <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p>
+          </div>
+          <div className={styles.settings}>
             <h2>Settings</h2>
 
             <div className={styles.toggleBar}>
@@ -104,9 +106,9 @@ const Home: NextPage = () => {
               <Toggle checked={darkMode} onClick={() => {setDarkMode(prev => !prev)}}></Toggle>
               <p>Dark Mode</p>
             </div>
-            {/* <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p> */}
+            <br />
           </div>
-            <Footer />
+          <Footer />
         </div>
       }
       {
