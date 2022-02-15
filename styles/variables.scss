@@ -34,5 +34,9 @@ $light: #FFFFFB;
 }
 
 @mixin outline {
-  outline: 1.5px solid $dark;
+  outline: 2px solid $dark;
+}
+
+@mixin outline-subtle {
+  outline: 1px solid $dark;
 }

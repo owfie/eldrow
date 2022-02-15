@@ -9,7 +9,7 @@
   position: relative;
 
   .inside {
-    @include outline;
+    @include outline-subtle;
 
     width: 1em;
     height: 1em;
