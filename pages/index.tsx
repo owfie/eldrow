@@ -14,10 +14,10 @@ import { Flash } from 'components/Flash'
 import { Toggle } from 'components/Toggle'
 import { Chart } from 'components/Chart'
 
+import { getFirestore, doc, query, Firestore, DocumentReference, collection, getDoc, DocumentSnapshot } from 'firebase/firestore'
+
 const lettersPerWord = 5
 const wordsPerRound = 6
-
-const secret = 'react'
 
 type word = string[]
 type attempts = string[]
@@ -48,7 +48,44 @@ const data = [
   }
 ]
 
-const Home: NextPage = () => {
+const db = getFirestore()
+
+type FirestoreWord = {
+  word: string
+  date: string
+}
+
+import {DateTime} from 'luxon'
+
+export async function getServerSideProps() {
+
+  const today = DateTime.now().setZone('Australia/Adelaide')
+  const todayString = today.toFormat('yyyy-MM-dd')
+  const tomorrow = today.plus({days: 1})
+
+  type word = { word: string }
+
+  const todayRef: DocumentReference<word> = doc(db, `words/${todayString}`) as DocumentReference<word>
+ 
+  const word = (await (await getDoc(todayRef)).data() as word).word
+  
+  return {
+    props: { firestoreWord: {
+      word: word,
+      date: todayString
+    }},
+  }
+}
+
+interface HomeProps {
+  firestoreWord: FirestoreWord
+}
+
+const Home: NextPage<HomeProps> = (props) => {
+
+  const { firestoreWord } = props
+
+  const secret = firestoreWord.word
 
   const {gameOver} = React.useContext(GameContext)
   const [currentPage, setCurrentPage] = React.useState<page>('game')
@@ -76,7 +113,7 @@ const Home: NextPage = () => {
       </div>
       {
         currentPage === 'game' &&
-        <Game />
+        <Game word={firestoreWord.word} />
       }
       {
         currentPage === 'about' &&
@@ -209,7 +246,14 @@ type Hint = {
   hidden: boolean
 }
 
-export const Game: React.FC = () => {
+interface GameProps {
+  word: string
+}
+
+export const Game: React.FC<GameProps> = (props) => {
+
+  const { word: secret } = props
+  
 
   const [attempts, setAttempts] = React.useState<attempts>([])
   const [input, setInput] = React.useState<input>(['', '', '', '', ''])
