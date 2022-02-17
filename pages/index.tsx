@@ -3,7 +3,7 @@ import {PressedKeyContext} from 'components/KeyContext'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import React from 'react'
-import { LetterBox, WordBox } from '../components/LetterBox'
+import { Grade, LetterBox, WordBox } from '../components/LetterBox'
 import styles from './Home.module.scss'
 import { words } from '../words'
 import { GameContext } from 'components/GameContext'
@@ -250,6 +250,10 @@ interface GameProps {
   word: string
 }
 
+export type attemptedLetter = {
+  [letter: string]: Grade
+}
+
 export const Game: React.FC<GameProps> = (props) => {
 
   const { word: secret } = props
@@ -261,6 +265,8 @@ export const Game: React.FC<GameProps> = (props) => {
   const [hint, setHint] = React.useState<Hint | undefined>(undefined)
   const [showFlash, setShowFlash] = React.useState<boolean>(false)
   const [lives, setLives] = React.useState<number>(wordsPerRound)
+
+  const [attemptedLetters, setAttemptedLetters] = React.useState<attemptedLetter[]>([])
 
   const {gameOver, setGameOver} = React.useContext(GameContext)
   const {pressedKey: activeKey, setKey} = React.useContext(PressedKeyContext)
@@ -302,6 +308,10 @@ export const Game: React.FC<GameProps> = (props) => {
 
     // If word is valid, add it to the attempts.
     setAttempts(attempts => [...attempts, word.join('')])
+    const newAttemptedLetters = word.map((letter, i) => {
+      return ({[letter]: getGrade(letter, i)})
+    }) as attemptedLetter[]
+    setAttemptedLetters([...attemptedLetters, ...newAttemptedLetters])
 
     // If word is the secret, end the game.
     if (word.join('') === secret) {
@@ -379,7 +389,7 @@ export const Game: React.FC<GameProps> = (props) => {
     }
   }, [activeKey, dispatchInput, dispatchBackspace, setKey, focusIndex, input, submitWord, gameOver])
 
-  const getGrade = (letter: string, position: number) => {
+  const getGrade: (l: string, p: number) => Grade = (letter: string, position: number) =>{
     if (secret[position] === letter) return 'yes'
     if (secret.includes(letter)) return 'almost'
     return 'no'
@@ -405,7 +415,7 @@ export const Game: React.FC<GameProps> = (props) => {
       }
       <div className={styles.gui}>
         <HealthBar total={wordsPerRound} lives={lives}/>
-        <Keyboard />
+        <Keyboard attemptedLetters={attemptedLetters}/>
       </div>
       <div className={styles.gameZone}>
         {attempts.map((attempt, index) => {

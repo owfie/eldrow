@@ -48,6 +48,22 @@
   border-bottom: $dark 2px solid;
   border-right: $dark 2px solid;
 
+  &.inactive {
+    background-color: $dark;
+    color: $light;
+    border-bottom: $light 2px solid;
+    border-right: $light 2px solid;
+    outline: $light 1px solid;
+  }
+
+  &.yes {
+    background-color: $yes;
+  }
+
+  &.almost {
+    background-color: $almost;
+  }
+
   &:active {
     @include pressed;
   }

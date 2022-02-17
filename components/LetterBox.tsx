@@ -10,7 +10,9 @@ interface LetterBoxProps {
 
 export type Grade = 'yes' | 'almost' | 'no' | undefined
 
-const getGradeClassName = (grade: Grade) => {
+export const getGradeClassName = (grade: Grade, styles: {
+  readonly [key: string]: string;
+}) => {
   switch(grade) {
     case 'yes': return styles.yes
     case 'almost': return styles.almost
@@ -39,7 +41,7 @@ export const LetterBox: React.FC<LetterBoxProps> = (props) => {
     }
   }, [blinking, setBlinking, focused])
 
-  return <div style={grade !== 'no' && grade ? getRandomRotationStyle() : undefined} onClick={onClick} className={`${styles.LetterBox} ${getGradeClassName(grade)}`}>
+  return <div style={grade !== 'no' && grade ? getRandomRotationStyle() : undefined} onClick={onClick} className={`${styles.LetterBox} ${getGradeClassName(grade, styles)}`}>
     <div className={styles.inside}>{children}</div>
     {focused && blinking && <div className={styles.focused}></div>}
   </div>
