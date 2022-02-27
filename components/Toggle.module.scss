@@ -2,27 +2,30 @@
   width: 40px;
   height: 22px;
   border-radius: 22px;
-  @include outline;
   position: relative;
   cursor: pointer;
   background-color: $light;
   transition: background-color 0.1s linear;
 
+  border: 2px solid $dark;
+  box-sizing: content-box;
+
 
   .inner {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 24px;
 
-    @include outline;
+    border: 1px solid $dark;
+
     background-color: $light;
 
 
     position: absolute;
     z-index: 1000;
 
-    left: 3px;
-    top: 3px;
+    left: 2px;
+    top: 2px;
 
     transition: left 0.1s ease-out;
   }
