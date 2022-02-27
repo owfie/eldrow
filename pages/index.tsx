@@ -1,30 +1,15 @@
-import { Keyboard } from 'components/Keyboard'
-import {PressedKeyContext} from 'components/KeyContext'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import React from 'react'
-import { Grade, LetterBox, WordBox } from '../components/LetterBox'
+import { LetterBox, WordBox } from '../components/LetterBox'
 import styles from './Home.module.scss'
-import { words } from '../words'
 import { GameContext } from 'components/GameContext'
-import { HealthBar, Heart } from 'components/HealthBar'
+import { Heart } from 'components/HealthBar'
 import { Rainbow } from 'components/Rainbow'
-import { Hint } from 'components/Hint'
-import { Flash } from 'components/Flash'
 import { Toggle } from 'components/Toggle'
 import { Chart } from 'components/Chart'
 import app from '../firebase/clientApp'
-import { getFirestore, doc, query, Firestore, DocumentReference, collection, getDoc, DocumentSnapshot } from 'firebase/firestore'
-
-const lettersPerWord = 5
-const wordsPerRound = 6
-
-type word = string[]
-type attempts = string[]
-type focusIndex = number
-type input = string[]
-
-type page = 'game' | 'stats' | 'about'
+import { getFirestore, doc, DocumentReference, getDoc } from 'firebase/firestore'
 
 const data = [
   {
@@ -54,6 +39,9 @@ type FirestoreWord = {
 }
 
 import {DateTime} from 'luxon'
+import { initializeWords } from 'utils/initializeWords'
+import { page } from 'utils/types'
+import { Game } from 'components/Game'
 
 export async function getServerSideProps() {
 
@@ -211,235 +199,13 @@ const Footer = () => {
   </div>
 }
 
-// import fs from 'fs'
-
 // export async function getStaticProps() {
+//   initializeWords()
 
-//   const path = process.cwd()
-
-//   const filePath = path + '/swords.txt'
-//   const exportPath = path + '/words.ts'
-
-//   const words = fs.readFileSync(filePath, 'utf8').split('\n')
-
-//   fs.writeFileSync(exportPath, `export const words = ${JSON.stringify(words)}`)
 //   return {
 //     props: {
-//     },
-//   };
+//     }
+//   }
 // }
-// 
-
-const getWinHint = (livesLeft: number) => {
-  switch (livesLeft) {
-    case 1: return 'Phew!';
-    case 2: return 'Nice!';
-    case 3: return 'Good job!';
-    case 4: return 'Great work!';
-    case 5: return 'Wow!';
-    default: return 'Uhhh... this is awkward.';
-  }
-}
-
-type Hint = {
-  text: string
-  hidden: boolean
-}
-
-interface GameProps {
-  word: string
-}
-
-export type attemptedLetter = {
-  [letter: string]: Grade
-}
-
-export const Game: React.FC<GameProps> = (props) => {
-
-  const { word: secret } = props
-  
-
-  const [attempts, setAttempts] = React.useState<attempts>([])
-  const [input, setInput] = React.useState<input>(['', '', '', '', ''])
-  const [focusIndex, setFocusIndex] = React.useState<focusIndex>(0)
-  const [hint, setHint] = React.useState<Hint | undefined>(undefined)
-  const [showFlash, setShowFlash] = React.useState<boolean>(false)
-  const [lives, setLives] = React.useState<number>(wordsPerRound)
-
-  const [attemptedLetters, setAttemptedLetters] = React.useState<attemptedLetter[]>([])
-
-  const {gameOver, setGameOver} = React.useContext(GameContext)
-  const {pressedKey: activeKey, setKey} = React.useContext(PressedKeyContext)
-
-  React.useEffect(() => {
-    if (activeKey) {
-      setHint(hint => {return {text: hint?.text ?? '', hidden: true}})
-    }
-  }, [activeKey])
-
-  React.useEffect(() => {
-    if (hint && !hint.hidden) {
-
-      setTimeout(() => 
-        setHint(hint => {return {text: hint?.text ?? '', hidden: true}})
-      , 5000)
-    }
-  }, [hint, setHint])
-
-  const submitWord = React.useCallback((word: word) => {
-
-    // If word contains an empty string, it's not a valid word.
-    if (word.includes('')) {
-      setHint({text: 'Looks like you\'ve missed a letter.', hidden: false})
-      return
-    }
-
-    // If word is already in the attempts, it's not a valid word.
-    if (attempts.includes(word.join(''))) {
-      setHint({text: 'You\'ve already tried that.', hidden: false})
-      return
-    }
-
-    // If word is not in the words list, it's not a valid word.
-    if (!words.includes(word.join(''))) {
-      setHint({text: 'Are you sure that\'s a word?', hidden: false})
-      return
-    }
-
-    // If word is valid, add it to the attempts.
-    setAttempts(attempts => [...attempts, word.join('')])
-    const newAttemptedLetters = word.map((letter, i) => {
-      return ({[letter]: getGrade(letter, i)})
-    }) as attemptedLetter[]
-    setAttemptedLetters([...attemptedLetters, ...newAttemptedLetters])
-
-    // If word is the secret, end the game.
-    if (word.join('') === secret) {
-      setGameOver(true)
-      setHint({text: getWinHint(lives), hidden: false})
-      return
-    }
-
-    setLives(lives => lives - 1)
-
-    // If no attempts remaining, end the game.
-    if (attempts.length+1 === wordsPerRound) {
-      setGameOver(true)
-      const outputWord = secret.charAt(0).toUpperCase() + secret.slice(1).toLowerCase()
-      setHint({text: `Game over! The word was ${outputWord}.`, hidden: false})
-      return
-    }
-  
-    setInput(input => {
-      const newInput = [...input]
-      newInput.fill('')
-      return newInput
-    })
-
-    setFocusIndex(0)
-  },[attempts, setGameOver])
-
-  const dispatchBackspace = React.useCallback(() => {
-    if (focusIndex <= lettersPerWord) {
-      if (focusIndex === lettersPerWord || (input[focusIndex] === '' && focusIndex > 0)) {
-        setInput(input => {
-          const newInput = [...input]
-          newInput[focusIndex-1] = ''
-          return newInput
-        })
-        setFocusIndex(focusIndex => focusIndex - 1)
-      } else {
-        setInput(input => {
-          const newInput = [...input]
-          newInput[focusIndex] = ''
-          return newInput
-        })
-      }
-    }
-  }, [focusIndex, input])
-
-  const dispatchInput = React.useCallback((key: string) => {
-    if (focusIndex < lettersPerWord) {
-      setInput(input => {
-        const newInput = [...input]
-        newInput[focusIndex] = key
-        return newInput
-      })
-    }
-  }, [focusIndex])
-
-  React.useEffect(() => {
-    if (activeKey) {
-      if (activeKey === 'Backspace') {
-        dispatchBackspace()
-        setKey(undefined)
-
-      } else if(activeKey === 'Enter') {
-        if(!gameOver) submitWord(input)
-        setKey(undefined)
-        
-      } else {
-        dispatchInput(activeKey)
-        setKey(undefined)
-
-        if (focusIndex < lettersPerWord) {
-          setFocusIndex(focusIndex => focusIndex + 1)
-        }
-      }
-    }
-  }, [activeKey, dispatchInput, dispatchBackspace, setKey, focusIndex, input, submitWord, gameOver])
-
-  const getGrade: (l: string, p: number) => Grade = (letter: string, position: number) =>{
-    if (secret[position] === letter) return 'yes'
-    if (secret.includes(letter)) return 'almost'
-    return 'no'
-  }
-
-  React.useEffect(() => {
-    if (attempts.length > 0) {
-      setShowFlash(true)
-      setTimeout(() => {
-        setShowFlash(false)
-      }, 100)
-    }
-  }, [attempts])
-
-  return (
-    <div className={styles.game} style={{position:'relative'}}>
-      {/* <Flash hidden={!showFlash}/> */}
-      {
-        hint!==undefined && 
-        <Hint hidden={hint.hidden}>
-          {hint.text}
-        </Hint>
-      }
-      <div className={styles.gui}>
-        <HealthBar total={wordsPerRound} lives={lives}/>
-        <Keyboard attemptedLetters={attemptedLetters}/>
-      </div>
-      <div className={styles.gameZone}>
-        {attempts.map((attempt, index) => {
-          const word = attempt.split('')
-          return <WordBox key={index}>
-            {word.map((letter, index) => (
-              <LetterBox key={index} grade={getGrade(letter, index)}>
-                {letter}
-              </LetterBox>
-            ))}
-          </WordBox>
-        })}
-        {!gameOver && 
-        <WordBox>
-            {input.map((letter, i) => {
-              return <LetterBox onClick={() => setFocusIndex(i)} key={`input-${i}`} focused={focusIndex===i}>
-                {letter}
-              </LetterBox>
-            })}
-          </WordBox>
-        }
-      </div>
-    </div>
-  )
-}
 
 export default Home

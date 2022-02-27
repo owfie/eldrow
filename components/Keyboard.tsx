@@ -1,8 +1,9 @@
 import { PressedKeyContext } from 'components/KeyContext'
-import { attemptedLetter } from 'pages'
+import { attemptedLetter } from '../utils/types'
 import React, { CSSProperties } from 'react'
 import styles from './Keyboard.module.scss'
-import { getGradeClassName, Grade } from './LetterBox'
+import { getGradeClassName } from './LetterBox'
+import { grade } from '../utils/types'
 
 interface KeyboardProps { 
   attemptedLetters: attemptedLetter[]
@@ -14,7 +15,7 @@ const row3 = ['z','x','c','v','b','n','m']
 const backspace = '←'
 const submit = '⏎'
 
-const checkGrade: (letter: string, attempts: attemptedLetter[]) => Grade = (letter, attemptedLetters) => {
+const checkGrade: (letter: string, attempts: attemptedLetter[]) => grade = (letter, attemptedLetters) => {
   const letterAttempts = attemptedLetters.filter(attempt => attempt[letter])
   const bestAttempt = letterAttempts.find(attempt => attempt[letter] === 'yes') ?? letterAttempts.find(attempt => attempt[letter] === 'almost') ?? letterAttempts.find(attempt => attempt[letter] === 'no')
   return bestAttempt ? bestAttempt[letter] : undefined
@@ -26,7 +27,7 @@ const renderKeys = (row: string[], attemptedLetters: attemptedLetter[]) => {
   })
 }
 
-export const getKeyClassName = (grade: Grade) => {
+export const getKeyClassName = (grade: grade) => {
   switch(grade) {
     case 'yes': return styles.yes
     case 'almost': return styles.almost
@@ -51,7 +52,7 @@ export const Keyboard: React.FC<KeyboardProps> = (props) => {
 
 interface KeyProps {
   keyName: string
-  state?: Grade
+  state?: grade
   override?: string
   style?: CSSProperties
 }

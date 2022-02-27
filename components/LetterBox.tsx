@@ -1,16 +1,15 @@
 import React from 'react'
 import styles from './LetterBox.module.scss'
+import { grade } from '../utils/types'
 
 interface LetterBoxProps {
   children?: React.ReactNode
-  grade?: Grade
+  grade?: grade
   focused?: boolean
   onClick?: () => void
 }
 
-export type Grade = 'yes' | 'almost' | 'no' | undefined
-
-export const getGradeClassName = (grade: Grade, styles: {
+export const getGradeClassName = (grade: grade, styles: {
   readonly [key: string]: string;
 }) => {
   switch(grade) {
