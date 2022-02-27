@@ -1,4 +1,4 @@
-import firebase, {initializeApp} from "firebase/app"
+import {initializeApp, getApp, FirebaseOptions} from "firebase/app"
 import {getFirestore} from "firebase/firestore"
 
 // Your web app's Firebase configuration
@@ -13,8 +13,14 @@ const firebaseConfig = {
   measurementId: process.env.FIREBSAE_MEASUREMENT_ID
 }
 
-if (firebase.getApps.length === 0) {
-  firebase.initializeApp(firebaseConfig)
+const createFirebaseApp = (config: FirebaseOptions) => {
+  try {
+    return getApp()
+  } catch {
+    return initializeApp(config)
+  }
 }
 
-export default firebase;
+const app = createFirebaseApp(firebaseConfig)
+
+export default app

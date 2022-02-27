@@ -43,17 +43,16 @@
   background-color: $light;
   color: $dark;
   // border: 2px solid white;
-  border-radius: 5px;
-  @include outline;
-  border-bottom: $dark 2px solid;
-  border-right: $dark 2px solid;
+  border-radius: 8px;
+  // @include outline;
+  border-top: $dark 2px solid;
+  border-left: $dark 2px solid;
+  border-bottom: $dark 4px solid;
+  border-right: $dark 4px solid;
 
   &.inactive {
     background-color: $dark;
     color: $light;
-    border-bottom: $light 2px solid;
-    border-right: $light 2px solid;
-    outline: $light 1px solid;
   }
 
   &.yes {

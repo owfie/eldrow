@@ -13,7 +13,7 @@ import { Hint } from 'components/Hint'
 import { Flash } from 'components/Flash'
 import { Toggle } from 'components/Toggle'
 import { Chart } from 'components/Chart'
-
+import app from '../firebase/clientApp'
 import { getFirestore, doc, query, Firestore, DocumentReference, collection, getDoc, DocumentSnapshot } from 'firebase/firestore'
 
 const lettersPerWord = 5
@@ -48,8 +48,6 @@ const data = [
   }
 ]
 
-const db = getFirestore()
-
 type FirestoreWord = {
   word: string
   date: string
@@ -58,6 +56,8 @@ type FirestoreWord = {
 import {DateTime} from 'luxon'
 
 export async function getServerSideProps() {
+
+  const db = getFirestore(app)
 
   const today = DateTime.now().setZone('Australia/Adelaide')
   const todayString = today.toFormat('yyyy-MM-dd')
