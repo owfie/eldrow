@@ -1,5 +1,20 @@
+interface AppState { 
+  settings: {
+     darkMode: boolean
+     hardMode: boolean
+  }
+  gameHistory: GameState[]
+}
+
+interface GameState {
+  gameOver: boolean
+  secret: word 
+  attempts: attempts
+
+}
+
 type word = string[]
-type attempts = string[]
+type attempts = word[]
 type focusIndex = number
 type input = string[]
 
@@ -17,4 +32,4 @@ type attemptedLetter = {
   [letter: string]: grade
 }
 
-export type { word, attempts, focusIndex, input, page, hint, attemptedLetter, grade }
+export type { AppState, GameState, word, attempts, focusIndex, input, page, hint, attemptedLetter, grade }

@@ -33,15 +33,18 @@ interface GameProps {
 
 export const Game: React.FC<GameProps> = (props) => {
 
-  const { word: secret } = props
   
 
+  // Persistent Game State
+  const { word: secret } = props
   const [attempts, setAttempts] = React.useState<attempts>([])
+
+  // Safe State
   const [input, setInput] = React.useState<input>(['', '', '', '', ''])
   const [focusIndex, setFocusIndex] = React.useState<focusIndex>(0)
   const [hint, setHint] = React.useState<hint | undefined>(undefined)
   const [showFlash, setShowFlash] = React.useState<boolean>(false)
-  const [lives, setLives] = React.useState<number>(wordsPerRound)
+  const [lives, setLives] = React.useState<number>(wordsPerRound - attempts.length)
 
   const [attemptedLetters, setAttemptedLetters] = React.useState<attemptedLetter[]>([])
 
@@ -72,7 +75,7 @@ export const Game: React.FC<GameProps> = (props) => {
     }
 
     // If word is already in the attempts, it's not a valid word.
-    if (attempts.includes(word.join(''))) {
+    if (attempts.includes(word)) {
       setHint({text: 'You\'ve already tried that.', hidden: false})
       return
     }
@@ -84,7 +87,7 @@ export const Game: React.FC<GameProps> = (props) => {
     }
 
     // If word is valid, add it to the attempts.
-    setAttempts(attempts => [...attempts, word.join('')])
+    setAttempts(attempts => [...attempts, word])
     const newAttemptedLetters = word.map((letter, i) => {
       return ({[letter]: getGrade(letter, i)})
     }) as attemptedLetter[]
@@ -196,9 +199,8 @@ export const Game: React.FC<GameProps> = (props) => {
       </div>
       <div className={styles.gameZone}>
         {attempts.map((attempt, index) => {
-          const word = attempt.split('')
           return <WordBox key={index}>
-            {word.map((letter, index) => (
+            {attempt.map((letter, index) => (
               <LetterBox key={index} grade={getGrade(letter, index)}>
                 {letter}
               </LetterBox>
