@@ -42,6 +42,8 @@ import {DateTime} from 'luxon'
 import { initializeWords } from 'utils/initializeWords'
 import { page } from 'utils/types'
 import { Game } from 'components/Game'
+import { AppStateContext } from 'utils/appState'
+import { AppStateAction } from 'utils/appStateReducer'
 
 export async function getServerSideProps() {
 
@@ -73,13 +75,14 @@ const Home: NextPage<HomeProps> = (props) => {
 
   const { firestoreWord } = props
 
+  const { state, dispatch } = React.useContext(AppStateContext)
+
   const secret = firestoreWord.word
 
   const {gameOver} = React.useContext(GameContext)
   const [currentPage, setCurrentPage] = React.useState<page>('game')
 
-  const [hardcoreMode, setHardcoreMode] = React.useState(false)
-  const [darkMode, setDarkMode] = React.useState(false)
+
 
   return (
     <div className={styles.Home}>
@@ -144,11 +147,11 @@ const Home: NextPage<HomeProps> = (props) => {
             <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p>
             <h2>Settings</h2>
             <div className={styles.toggleBar}>
-              <Toggle checked={hardcoreMode} onClick={() => {setHardcoreMode(prev => !prev)}}></Toggle>
+              <Toggle checked={state.settings.hardMode} onClick={() => { dispatch && dispatch(AppStateAction.TOGGLE_HARD_MODE) }}></Toggle>
               <p>Hardcore Mode</p>
             </div>
             <div className={styles.toggleBar}>
-              <Toggle checked={darkMode} onClick={() => {setDarkMode(prev => !prev)}}></Toggle>
+              <Toggle checked={state.settings.darkMode} onClick={() => { dispatch && dispatch(AppStateAction.TOGGLE_DARK_MODE) }}></Toggle>
               <p>Dark Mode</p>
             </div>
             <br />

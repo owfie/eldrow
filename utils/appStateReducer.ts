@@ -8,9 +8,15 @@ export enum AppStateAction {
 }
 
 export const initializer = (initialState: AppState) => {
-  const storedState = localStorage.getItem(localStorageKey)
-  if (storedState) {
-    return JSON.parse(storedState) as AppState
+  if (typeof window !== 'undefined') {
+
+    const storedState = localStorage.getItem(localStorageKey)
+
+    if (storedState) {
+      return JSON.parse(storedState) as AppState
+    } else {
+      return initialState
+    }
   } else {
     return initialState
   }

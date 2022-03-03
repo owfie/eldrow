@@ -19,7 +19,7 @@ interface AppStateContextShape {
   dispatch?: React.Dispatch<AppStateAction>
 }
 
-const AppStateContext = React.createContext<AppStateContextShape>({ state: getDefaultAppState() })
+export const AppStateContext = React.createContext<AppStateContextShape>({ state: getDefaultAppState() })
 
 export const AppStateProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer(appStateReducer, getDefaultAppState(), initializer)
