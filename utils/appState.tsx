@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react'
+import { AppStateAction, appStateReducer, initializer } from './appStateReducer'
 import { AppState } from './types'
 
 export const localStorageKey = "appState"
@@ -13,19 +14,19 @@ export const getDefaultAppState: () => AppState = () => {
   }
 }
 
-const AppStateContext = React.createContext<AppState>(getDefaultAppState())
+interface AppStateContextShape {
+  state: AppState
+  dispatch?: React.Dispatch<AppStateAction>
+}
 
-export const AppStateReducer
+const AppStateContext = React.createContext<AppStateContextShape>({ state: getDefaultAppState() })
 
 export const AppStateProvider: React.FC = ({children}) => {
-  const [state, dispatch] = useReducer(reducer, getDefaultAppState())
+  const [state, dispatch] = useReducer(appStateReducer, getDefaultAppState(), initializer)
 
   React.useEffect(() => {
-    const storedState = localStorage.getItem('appState')
-    if (storedState) {
-      dispatch({type: 'SET_STATE', payload: JSON.parse(storedState)})
-    }
-  }, [])
+    localStorage.setItem(localStorageKey, JSON.stringify(state))
+  }, [state])
 
   return <AppStateContext.Provider value={{state, dispatch}}>
     {children}
