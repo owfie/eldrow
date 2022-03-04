@@ -1,5 +1,5 @@
 import {initializeApp, getApp, FirebaseOptions} from "firebase/app"
-import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore"
+import { getFirestore, enableIndexedDbPersistence, connectFirestoreEmulator } from "firebase/firestore"
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -21,6 +21,8 @@ const createFirebaseApp = (config: FirebaseOptions) => {
 
 const app = createFirebaseApp(firebaseConfig)
 const db = getFirestore(app)
+// TODO Check environment
+connectFirestoreEmulator(db, 'localhost', 8080)
 
 enableIndexedDbPersistence(db)
 .catch((err) => {
