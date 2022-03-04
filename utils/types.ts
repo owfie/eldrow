@@ -8,9 +8,10 @@ interface AppState {
 
 interface GameState {
   gameOver: boolean
+  date: string
   secret: word 
   attempts: attempts
-
+  solvedRetroactively: boolean // Future-proofing for being able to solve past puzzles while maintaining honest winstreak
 }
 
 type word = string[]

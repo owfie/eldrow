@@ -12,6 +12,8 @@ import { Keyboard } from "./Keyboard"
 
 import { grade } from '../utils/types'
 import { Flash } from "./Flash"
+import { AppStateContext } from "utils/appState"
+import { AppStateActionType } from "utils/appStateReducer"
 
 const getWinHint = (livesLeft: number) => {
   switch (livesLeft) {
@@ -29,6 +31,7 @@ const wordsPerRound = 6
 
 interface GameProps {
   word: string
+  date: string
 }
 
 export const Game: React.FC<GameProps> = (props) => {
@@ -36,8 +39,11 @@ export const Game: React.FC<GameProps> = (props) => {
   
 
   // Persistent Game State
-  const { word: secret } = props
-  const [attempts, setAttempts] = React.useState<attempts>([])
+  const { word: secret, date } = props
+  const { state, dispatch } = React.useContext(AppStateContext)
+  const todaysGame = state.gameHistory.find(game => game.date === date)
+
+  const attempts = todaysGame?.attempts || []
 
   // Safe State
   const [input, setInput] = React.useState<input>(['', '', '', '', ''])
@@ -87,7 +93,18 @@ export const Game: React.FC<GameProps> = (props) => {
     }
 
     // If word is valid, add it to the attempts.
-    setAttempts(attempts => [...attempts, word])
+
+    dispatch && dispatch({
+      type: AppStateActionType.UPDATE_GAME,
+      payload: {
+        date,
+        secret: secret.split(''),
+        attempts: [...attempts, word],
+        solvedRetroactively: false,
+        gameOver: gameOver
+      }
+    })
+
     const newAttemptedLetters = word.map((letter, i) => {
       return ({[letter]: getGrade(letter, i)})
     }) as attemptedLetter[]

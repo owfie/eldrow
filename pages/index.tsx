@@ -8,8 +8,8 @@ import { Heart } from 'components/HealthBar'
 import { Rainbow } from 'components/Rainbow'
 import { Toggle } from 'components/Toggle'
 import { Chart } from 'components/Chart'
-import app from '../firebase/clientApp'
-import { getFirestore, doc, DocumentReference, getDoc } from 'firebase/firestore'
+import {db} from '../firebase/clientApp'
+import { doc, DocumentReference, getDoc } from 'firebase/firestore'
 
 const data = [
   {
@@ -43,11 +43,9 @@ import { initializeWords } from 'utils/initializeWords'
 import { page } from 'utils/types'
 import { Game } from 'components/Game'
 import { AppStateContext } from 'utils/appState'
-import { AppStateAction } from 'utils/appStateReducer'
+import { AppStateAction, AppStateActionType } from 'utils/appStateReducer'
 
 export async function getServerSideProps() {
-
-  const db = getFirestore(app)
 
   const today = DateTime.now().setZone('Australia/Adelaide')
   const todayString = today.toFormat('yyyy-MM-dd')
@@ -104,7 +102,7 @@ const Home: NextPage<HomeProps> = (props) => {
       </div>
       {
         currentPage === 'game' &&
-        <Game word={firestoreWord.word} />
+        <Game word={firestoreWord.word} date={firestoreWord.date}/>
       }
       {
         currentPage === 'about' &&
@@ -147,11 +145,11 @@ const Home: NextPage<HomeProps> = (props) => {
             <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p>
             <h2>Settings</h2>
             <div className={styles.toggleBar}>
-              <Toggle checked={state.settings.hardMode} onClick={() => { dispatch && dispatch(AppStateAction.TOGGLE_HARD_MODE) }}></Toggle>
+              <Toggle checked={state.settings.hardMode} onClick={() => { dispatch && dispatch({ type: AppStateActionType.TOGGLE_HARD_MODE }) }}></Toggle>
               <p>Hardcore Mode</p>
             </div>
             <div className={styles.toggleBar}>
-              <Toggle checked={state.settings.darkMode} onClick={() => { dispatch && dispatch(AppStateAction.TOGGLE_DARK_MODE) }}></Toggle>
+              <Toggle checked={state.settings.darkMode} onClick={() => { dispatch && dispatch({ type: AppStateActionType.TOGGLE_DARK_MODE }) }}></Toggle>
               <p>Dark Mode</p>
             </div>
             <br />
