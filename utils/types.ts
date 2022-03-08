@@ -1,12 +1,13 @@
 interface AppState { 
+  loaded: boolean
   settings: {
      darkMode: boolean
      hardMode: boolean
   }
-  gameHistory: GameState[]
+  gameHistory: SavedGame[]
 }
 
-interface GameState {
+interface SavedGame {
   gameOver: boolean
   date: string
   secret: word 
@@ -14,23 +15,34 @@ interface GameState {
   solvedRetroactively: boolean // Future-proofing for being able to solve past puzzles while maintaining honest winstreak
 }
 
+interface GameState extends SavedGame {
+  lives: number
+  focusIndex: number
+  attemptedLetters: attemptedLetter[]
+  hint: hint
+  input: word
+}
+
 type word = string[]
 type attempts = word[]
 type focusIndex = number
-type input = string[]
 
 type page = 'game' | 'stats' | 'about'
 
 type grade = 'yes' | 'almost' | 'no' | undefined
 
-
 type hint = {
   text: string
   hidden: boolean
-}
+} | undefined
 
 type attemptedLetter = {
   [letter: string]: grade
 }
 
-export type { AppState, GameState, word, attempts, focusIndex, input, page, hint, attemptedLetter, grade }
+type FirestoreWord = {
+  word: string
+  date: string
+}
+
+export type { FirestoreWord, AppState, SavedGame, GameState, word, attempts, focusIndex, page, hint, attemptedLetter, grade }

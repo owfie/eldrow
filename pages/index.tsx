@@ -3,12 +3,11 @@ import Head from 'next/head'
 import React from 'react'
 import { LetterBox, WordBox } from '../components/LetterBox'
 import styles from './Home.module.scss'
-import { GameContext } from 'components/GameContext'
 import { Heart } from 'components/HealthBar'
 import { Rainbow } from 'components/Rainbow'
 import { Toggle } from 'components/Toggle'
 import { Chart } from 'components/Chart'
-import {db} from '../firebase/clientApp'
+import { db } from '../firebase/clientApp'
 import { doc, DocumentReference, getDoc } from 'firebase/firestore'
 
 const data = [
@@ -33,17 +32,11 @@ const data = [
   }
 ]
 
-type FirestoreWord = {
-  word: string
-  date: string
-}
-
 import {DateTime} from 'luxon'
-import { initializeWords } from 'utils/initializeWords'
-import { page } from 'utils/types'
+import { FirestoreWord, page, SavedGame } from 'utils/types'
 import { Game } from 'components/Game'
 import { AppStateContext } from 'utils/appState'
-import { AppStateAction, AppStateActionType } from 'utils/appStateReducer'
+import { AppStateActionType } from 'utils/appStateReducer'
 
 export async function getServerSideProps() {
 
@@ -75,12 +68,16 @@ const Home: NextPage<HomeProps> = (props) => {
 
   const { state, dispatch } = React.useContext(AppStateContext)
 
-  const secret = firestoreWord.word
+  const savedGame = state.loaded ? (state.gameHistory.find(g => g.date === firestoreWord.date)
+   ?? {
+    gameOver: false,
+    date: firestoreWord.date,
+    secret: firestoreWord.word.split(''),
+    attempts: [],
+    solvedRetroactively: false
+  } as SavedGame) : undefined
 
-  const {gameOver} = React.useContext(GameContext)
   const [currentPage, setCurrentPage] = React.useState<page>('game')
-
-
 
   return (
     <div className={styles.Home}>
@@ -102,7 +99,8 @@ const Home: NextPage<HomeProps> = (props) => {
       </div>
       {
         currentPage === 'game' &&
-        <Game word={firestoreWord.word} date={firestoreWord.date}/>
+        savedGame &&
+        <Game savedGame={savedGame} />
       }
       {
         currentPage === 'about' &&

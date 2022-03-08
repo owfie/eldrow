@@ -9,8 +9,25 @@
   margin-bottom: 15px;
 
   .heart {
+    font-family: 'entypo', sans-serif;
+    color: $dark;
+    position: relative;
     margin-right: 0.1em;
-    // @include shadow;
+  
+    @include unselectable;
+    @include text-outline;
+  
+    &.active {
+      &:before {
+        color: $yellow;
+        font-family: 'entypo', sans-serif;
+    
+        content: '♥';
+        position: absolute;
+        top: -4px;
+        left: -2px;
+      }
+    }
   }
 
   .used {
@@ -21,25 +38,4 @@
 @font-face {
   font-family: 'entypo';
   src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-90/entypo.woff') format('woff');
-}
-
-.heart {
-  font-family: 'entypo', sans-serif;
-  color: $dark;
-  position: relative;
-
-  @include unselectable;
-  @include text-outline;
-
-  &.active {
-    &:before {
-      color: $yellow;
-      font-family: 'entypo', sans-serif;
-  
-      content: '♥';
-      position: absolute;
-      top: -4px;
-      left: -2px;
-    }
-  }
 }

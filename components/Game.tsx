@@ -2,8 +2,7 @@ import React from "react"
 import styles from './Game.module.scss'
 import { LetterBox, WordBox } from "./LetterBox"
 
-import { input, attempts, focusIndex, hint, attemptedLetter, word } from '../utils/types'
-import { GameContext } from "./GameContext"
+import { attemptedLetter, FirestoreWord, SavedGame, word } from '../utils/types'
 import { PressedKeyContext } from "./KeyContext"
 import { words } from "words"
 import { Hint } from "./Hint"
@@ -11,9 +10,9 @@ import { HealthBar } from "./HealthBar"
 import { Keyboard } from "./Keyboard"
 
 import { grade } from '../utils/types'
-import { Flash } from "./Flash"
 import { AppStateContext } from "utils/appState"
 import { AppStateActionType } from "utils/appStateReducer"
+import { GameStateActionType, gameStateReducer, getDefaultGameState } from "utils/gameStateReducer"
 
 const getWinHint = (livesLeft: number) => {
   switch (livesLeft) {
@@ -26,141 +25,173 @@ const getWinHint = (livesLeft: number) => {
   }
 }
 
-const lettersPerWord = 5
-const wordsPerRound = 6
+export const lettersPerWord = 5
+export const wordsPerRound = 6
+
+const getGrade: (l: string, p: number, secret: word) => grade = (letter: string, position: number, secret) =>{
+  if (secret[position] === letter) return 'yes'
+  if (secret.includes(letter)) return 'almost'
+  return 'no'
+}
 
 interface GameProps {
-  word: string
-  date: string
+  savedGame: SavedGame
 }
 
 export const Game: React.FC<GameProps> = (props) => {
 
-  
+  const { savedGame } = props
 
-  // Persistent Game State
-  const { word: secret, date } = props
-  const { state, dispatch } = React.useContext(AppStateContext)
-  const todaysGame = state.gameHistory.find(game => game.date === date)
+  const { state: appState, dispatch: appDispatcher } = React.useContext(AppStateContext)
 
-  const attempts = todaysGame?.attempts || []
+  const [ state, dispatch ] = React.useReducer(gameStateReducer, getDefaultGameState(savedGame))
 
-  // Safe State
-  const [input, setInput] = React.useState<input>(['', '', '', '', ''])
-  const [focusIndex, setFocusIndex] = React.useState<focusIndex>(0)
-  const [hint, setHint] = React.useState<hint | undefined>(undefined)
-  const [showFlash, setShowFlash] = React.useState<boolean>(false)
-  const [lives, setLives] = React.useState<number>(wordsPerRound - attempts.length)
-
-  const [attemptedLetters, setAttemptedLetters] = React.useState<attemptedLetter[]>([])
-
-  const {gameOver, setGameOver} = React.useContext(GameContext)
+  const { secret, date, input, focusIndex, lives, attemptedLetters, gameOver, hint, attempts, solvedRetroactively } = state
   const {pressedKey: activeKey, setKey} = React.useContext(PressedKeyContext)
 
   React.useEffect(() => {
+    // If a new attempt is added, update the App State
+    if (attempts.length === 0) return
+    if (JSON.stringify(attempts) === JSON.stringify(getDefaultGameState(savedGame).attempts)) return
+    if (JSON.stringify(savedGame.attempts) === JSON.stringify(attempts)) return
+
+    console.log('Updating saved game: ', savedGame)
+    appDispatcher && appDispatcher({type: AppStateActionType.UPDATE_GAME, payload: {
+      date,
+      secret,
+      attempts,
+      solvedRetroactively,
+      gameOver
+    }})
+  },[appDispatcher, attempts, date, gameOver, savedGame, savedGame.attempts, secret, solvedRetroactively])
+
+  React.useEffect(() => {
     if (activeKey) {
-      setHint(hint => {return {text: hint?.text ?? '', hidden: true}})
+      dispatch({
+        type: GameStateActionType.HINT_HIDE
+      })
     }
   }, [activeKey])
 
   React.useEffect(() => {
     if (hint && !hint.hidden) {
-
       setTimeout(() => 
-        setHint(hint => {return {text: hint?.text ?? '', hidden: true}})
+        dispatch({
+          type: GameStateActionType.HINT_HIDE
+        })
       , 5000)
     }
-  }, [hint, setHint])
+  }, [hint])
 
   const submitWord = React.useCallback((word: word) => {
 
     // If word contains an empty string, it's not a valid word.
     if (word.includes('')) {
-      setHint({text: 'Looks like you\'ve missed a letter.', hidden: false})
+      dispatch({
+        type: GameStateActionType.HINT_SHOW,
+        payload: 'Looks like you\'ve missed a letter.'
+      })
       return
     }
 
     // If word is already in the attempts, it's not a valid word.
     if (attempts.includes(word)) {
-      setHint({text: 'You\'ve already tried that.', hidden: false})
+      dispatch({
+        type: GameStateActionType.HINT_SHOW,
+        payload: 'You\'ve already tried that.'
+      })
       return
     }
 
     // If word is not in the words list, it's not a valid word.
     if (!words.includes(word.join(''))) {
-      setHint({text: 'Are you sure that\'s a word?', hidden: false})
+      dispatch({
+        type: GameStateActionType.HINT_SHOW,
+        payload: 'Are you sure that\'s a word?'
+      })
       return
     }
 
     // If word is valid, add it to the attempts.
 
-    dispatch && dispatch({
-      type: AppStateActionType.UPDATE_GAME,
-      payload: {
-        date,
-        secret: secret.split(''),
-        attempts: [...attempts, word],
-        solvedRetroactively: false,
-        gameOver: gameOver
-      }
+    // appDispatcher && appDispatcher({
+    //   type: AppStateActionType.UPDATE_GAME,
+    //   payload: {
+    //     date,
+    //     secret: secret,
+    //     attempts: [...attempts, word],
+    //     solvedRetroactively: false,
+    //     gameOver: gameOver
+    //   }
+    // })
+
+    dispatch({
+      type: GameStateActionType.INPUT_SUBMIT,
     })
 
     const newAttemptedLetters = word.map((letter, i) => {
-      return ({[letter]: getGrade(letter, i)})
+      return ({[letter]: getGrade(letter, i, secret)})
     }) as attemptedLetter[]
-    setAttemptedLetters([...attemptedLetters, ...newAttemptedLetters])
+
+    dispatch({
+      type: GameStateActionType.ADD_ATTEMPTED_LETTERS,
+      payload: newAttemptedLetters
+    })
 
     // If word is the secret, end the game.
-    if (word.join('') === secret) {
-      setGameOver(true)
-      setHint({text: getWinHint(lives), hidden: false})
+    if (word === secret) {
+      dispatch({
+        type:GameStateActionType.END_GAME
+      })
+      dispatch({
+        type: GameStateActionType.HINT_SHOW,
+        payload: getWinHint(lives)
+      })
       return
     }
 
-    setLives(lives => lives - 1)
+    dispatch({
+      type: GameStateActionType.DECREASE_LIVES
+    })
 
     // If no attempts remaining, end the game.
     if (attempts.length+1 === wordsPerRound) {
-      setGameOver(true)
-      const outputWord = secret.charAt(0).toUpperCase() + secret.slice(1).toLowerCase()
-      setHint({text: `Game over! The word was ${outputWord}.`, hidden: false})
+      dispatch({
+        type:GameStateActionType.END_GAME
+      })
+
+      const outputWord = secret[0].toUpperCase() + secret.map(l => l.toLowerCase())
+      dispatch({
+        type: GameStateActionType.HINT_SHOW,
+        payload: `Game over! The word was ${outputWord}.`
+      })
       return
     }
   
-    setInput(input => {
-      const newInput = [...input]
-      newInput.fill('')
-      return newInput
+    dispatch({
+      type: GameStateActionType.INPUT_CLEAR
     })
 
-    setFocusIndex(0)
-  },[attempts, setGameOver])
+    dispatch({
+      type: GameStateActionType.FOCUS_UPDATE,
+      payload: 0
+    })
+
+  },[attempts, lives, secret])
 
   const dispatchBackspace = React.useCallback(() => {
     if (focusIndex <= lettersPerWord) {
-      if (focusIndex === lettersPerWord || (input[focusIndex] === '' && focusIndex > 0)) {
-        setInput(input => {
-          const newInput = [...input]
-          newInput[focusIndex-1] = ''
-          return newInput
-        })
-        setFocusIndex(focusIndex => focusIndex - 1)
-      } else {
-        setInput(input => {
-          const newInput = [...input]
-          newInput[focusIndex] = ''
-          return newInput
-        })
-      }
+      dispatch({
+        type: GameStateActionType.INPUT_BACKSPACE
+      })
     }
-  }, [focusIndex, input])
+  }, [focusIndex])
 
   const dispatchInput = React.useCallback((key: string) => {
     if (focusIndex < lettersPerWord) {
-      setInput(input => {
-        const newInput = [...input]
-        newInput[focusIndex] = key
-        return newInput
+      dispatch({
+        type: GameStateActionType.INPUT_APPEND,
+        payload: key
       })
     }
   }, [focusIndex])
@@ -178,32 +209,12 @@ export const Game: React.FC<GameProps> = (props) => {
       } else {
         dispatchInput(activeKey)
         setKey(undefined)
-
-        if (focusIndex < lettersPerWord) {
-          setFocusIndex(focusIndex => focusIndex + 1)
-        }
       }
     }
   }, [activeKey, dispatchInput, dispatchBackspace, setKey, focusIndex, input, submitWord, gameOver])
 
-  const getGrade: (l: string, p: number) => grade = (letter: string, position: number) =>{
-    if (secret[position] === letter) return 'yes'
-    if (secret.includes(letter)) return 'almost'
-    return 'no'
-  }
-
-  React.useEffect(() => {
-    if (attempts.length > 0) {
-      setShowFlash(true)
-      setTimeout(() => {
-        setShowFlash(false)
-      }, 100)
-    }
-  }, [attempts])
-
   return (
     <div className={styles.Game} style={{position:'relative'}}>
-      {/* <Flash hidden={!showFlash}/> */}
       {
         hint!==undefined && 
         <Hint hidden={hint.hidden}>
@@ -214,11 +225,12 @@ export const Game: React.FC<GameProps> = (props) => {
         <HealthBar total={wordsPerRound} lives={lives}/>
         <Keyboard attemptedLetters={attemptedLetters}/>
       </div>
+     {/* Game: { JSON.stringify(savedGame) } */}
       <div className={styles.gameZone}>
         {attempts.map((attempt, index) => {
           return <WordBox key={index}>
             {attempt.map((letter, index) => (
-              <LetterBox key={index} grade={getGrade(letter, index)}>
+              <LetterBox key={index} grade={getGrade(letter, index, secret)}>
                 {letter}
               </LetterBox>
             ))}
@@ -227,7 +239,7 @@ export const Game: React.FC<GameProps> = (props) => {
         {!gameOver && 
         <WordBox>
             {input.map((letter, i) => {
-              return <LetterBox onClick={() => setFocusIndex(i)} key={`input-${i}`} focused={focusIndex===i}>
+              return <LetterBox onClick={() => dispatch({ type: GameStateActionType.FOCUS_UPDATE, payload: i})} key={`input-${i}`} focused={focusIndex===i}>
                 {letter}
               </LetterBox>
             })}
