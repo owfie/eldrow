@@ -30,7 +30,7 @@ export const AppStateProvider: React.FC = ({children}) => {
     if (typeof window !== 'undefined') {
       const storedState = localStorage.getItem(localStorageKey)
       if (storedState) {
-        console.log('Found stored state in local storage: ', storedState)
+        // console.log('Found stored state in local storage: ', storedState)
         dispatch({ type: AppStateActionType.LOAD_FROM_LOCAL_STORAGE, payload: JSON.parse(storedState) as AppState })
       }
       dispatch({type: AppStateActionType.LOADED})
@@ -44,11 +44,11 @@ export const AppStateProvider: React.FC = ({children}) => {
       const storedState = localStorage.getItem(localStorageKey)
       if (storedState) {
         if (JSON.stringify(state) !== storedState && JSON.stringify(state) !== JSON.stringify(getDefaultAppState())) {
-          console.log('Overwriting local storage with: ', JSON.stringify(state))
+          // console.log('Overwriting local storage with: ', JSON.stringify(state))
           localStorage.setItem(localStorageKey, JSON.stringify(state))
         }
       } else {
-        console.log('Storing state in local storage: ', JSON.stringify(state))
+        // console.log('Storing state in local storage: ', JSON.stringify(state))
         localStorage.setItem(localStorageKey, JSON.stringify(state))
       }
     }

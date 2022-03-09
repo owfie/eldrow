@@ -14,6 +14,8 @@ import { AppStateContext } from "utils/appState"
 import { AppStateActionType } from "utils/appStateReducer"
 import { GameStateActionType, gameStateReducer, getDefaultGameState } from "utils/gameStateReducer"
 
+import _, { includes, isEqual } from "lodash"
+
 const getWinHint = (livesLeft: number) => {
   switch (livesLeft) {
     case 1: return 'Phew!'
@@ -55,7 +57,7 @@ export const Game: React.FC<GameProps> = (props) => {
     if (JSON.stringify(attempts) === JSON.stringify(getDefaultGameState(savedGame).attempts)) return
     if (JSON.stringify(savedGame.attempts) === JSON.stringify(attempts)) return
 
-    console.log('Updating saved game: ', savedGame)
+    // console.log('Updating saved game: ', savedGame)
     appDispatcher && appDispatcher({type: AppStateActionType.UPDATE_GAME, payload: {
       date,
       secret,
@@ -75,10 +77,11 @@ export const Game: React.FC<GameProps> = (props) => {
 
   React.useEffect(() => {
     if (hint && !hint.hidden) {
-      setTimeout(() => 
+      setTimeout(() => {
         dispatch({
           type: GameStateActionType.HINT_HIDE
         })
+      }
       , 5000)
     }
   }, [hint])
@@ -93,14 +96,15 @@ export const Game: React.FC<GameProps> = (props) => {
       })
       return
     }
-
+    
     // If word is already in the attempts, it's not a valid word.
-    if (attempts.includes(word)) {
+    if (includes(JSON.stringify(attempts as word[]), JSON.stringify(word))) {
       dispatch({
         type: GameStateActionType.HINT_SHOW,
         payload: 'You\'ve already tried that.'
       })
       return
+    } else {
     }
 
     // If word is not in the words list, it's not a valid word.
@@ -139,7 +143,7 @@ export const Game: React.FC<GameProps> = (props) => {
     })
 
     // If word is the secret, end the game.
-    if (word === secret) {
+    if (isEqual(word, secret)) {
       dispatch({
         type:GameStateActionType.END_GAME
       })
@@ -160,7 +164,7 @@ export const Game: React.FC<GameProps> = (props) => {
         type:GameStateActionType.END_GAME
       })
 
-      const outputWord = secret[0].toUpperCase() + secret.map(l => l.toLowerCase())
+      const outputWord = secret[0].toUpperCase() + secret.slice(1).join('').toLowerCase()
       dispatch({
         type: GameStateActionType.HINT_SHOW,
         payload: `Game over! The word was ${outputWord}.`
@@ -216,7 +220,7 @@ export const Game: React.FC<GameProps> = (props) => {
   return (
     <div className={styles.Game} style={{position:'relative'}}>
       {
-        hint!==undefined && 
+        hint && 
         <Hint hidden={hint.hidden}>
           {hint.text}
         </Hint>

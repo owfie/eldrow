@@ -44,9 +44,9 @@ export const gameStateReducer: React.Reducer<GameState, GameStateAction> = (stat
         }
       }
     case GameStateActionType.HINT_HIDE:
-      return { ...state, hidden: false }
+      return { ...state, hint: { text: state.hint?.text ?? '', hidden: true } }
     case GameStateActionType.HINT_SHOW:
-      return { ...state, hint: { text: action.payload, hidden: true } }
+      return { ...state, hint: { text: action.payload, hidden: false } }
     case GameStateActionType.DECREASE_LIVES:
       return { ...state, lives: state.lives - 1 }
     case GameStateActionType.END_GAME:
