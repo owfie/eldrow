@@ -1,0 +1,25 @@
+.Page {
+  flex-grow: 1;
+  width: 100%;
+  text-align: center;
+  padding-top: 65px;
+
+  @media (max-width: 500px) {
+    padding-top: 35px;
+  }
+
+  padding-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.back {
+  align-self: flex-start;
+  margin-bottom: 10px;
+  cursor: pointer;
+
+  a {
+    cursor: pointer;
+  }
+}

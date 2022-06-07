@@ -45,4 +45,16 @@ type FirestoreWord = {
   date: string
 }
 
-export type { FirestoreWord, AppState, SavedGame, GameState, word, attempts, focusIndex, page, hint, attemptedLetter, grade }
+export type {
+  FirestoreWord,
+  AppState,
+  SavedGame,
+  GameState,
+  word,
+  attempts,
+  focusIndex,
+  page,
+  hint,
+  attemptedLetter,
+  grade,
+}

@@ -135,3 +135,5 @@ Mar 08, 2022 11:26:23 AM io.gapi.emulators.netty.HttpVersionRoutingHandler chann
 INFO: Detected non-HTTP/2 connection.
 Mar 08, 2022 11:26:24 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
 INFO: Websocket client disconnected
+*** shutting down gRPC server since JVM is shutting down
+*** server shut down
