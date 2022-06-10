@@ -91,10 +91,6 @@ const Home: NextPage<HomeProps> = (props) => {
           <a onClick={() => {setCurrentPage('game')}}>eldroW</a>
           <Rainbow revealDirection='up' collapsed={currentPage !== 'game'} />
         </div>
-        <nav>
-          <a className={`${currentPage==='stats' && styles.active}`} onClick={() => {setCurrentPage('stats')}}>Stats</a>
-          <a className={`${currentPage==='about' && styles.active}`} onClick={() => {setCurrentPage('about')}}>About</a>
-        </nav>
       </div>
       <div className={`${styles.divider}`}>
         <Rainbow collapsed={currentPage === 'game'} revealDirection='right'/>
