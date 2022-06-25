@@ -3,12 +3,13 @@ import type { AppProps } from 'next/app'
 
 import { KeyProvider } from 'components/KeyContext';
 import { AppStateProvider } from 'utils/appState';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { Header } from 'components/Header';
 import { AnimatePresence } from 'framer-motion';
 
 function MyApp({ Component, pageProps }: AppProps) {
+
   return (
     <AppStateProvider>
       <KeyProvider>
@@ -21,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           initial={false}
           onExitComplete={() => window.scrollTo(0, 0)}
         >
-            <Component {...pageProps} />
+          <Component {...pageProps} />
         </AnimatePresence>
       </KeyProvider>
     </AppStateProvider>

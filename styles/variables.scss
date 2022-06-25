@@ -1,8 +1,8 @@
-$maroon: #650861;
-$red: #B21D55;
-$orange: #FB710A;
-$yellow: #FFDE30;
-$green: #B1D61C;
+$maroon: #70036B;
+$red: #D50C60;
+$orange: #FF6332;
+$yellow: #FFDF39;
+$green: #BCE80C;
 $blue: #20BDA1;
 
 
@@ -10,8 +10,16 @@ $yes: $green;
 $almost: $yellow;
 $inactive: #b8c5c5b2;
 
-$dark: #26262F;
-$light: #FFFFFB;
+$light-mode-dark: #2A272D;
+$light-mode-light: #FFFFF6;
+
+$dark-mode-light: #EAEEF4;
+$dark-mode-dark: #2A272D;
+$dark-mode-elevated: #403B45;
+
+
+$dark: $light-mode-dark;
+$light: $light-mode-light;
 
 @mixin shadow {
   filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.15)); 

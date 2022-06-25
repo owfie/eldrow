@@ -1,9 +1,5 @@
 .LetterBox {
-
-
-
   @include outline;
-  // @include shadow;
   @include unselectable;
 
   position: relative;

@@ -10,7 +10,6 @@
   height: 60px;
   margin-bottom: 25px;
   flex-shrink: 0;
-
   @media (max-width: 500px) {
     height: 60px;
   }
@@ -25,6 +24,10 @@
     font-size: 1.6em;
     font-weight: 600;
 
+    a {
+      text-decoration: none;
+    }
+
     margin: 0;
     cursor: pointer;
   }
@@ -34,11 +37,13 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    text-decoration: none;
 
     a {
       cursor:pointer;
       margin-right: 2em;
-
+      text-decoration: none;
+      
       &.active {
         text-decoration: underline;
       }

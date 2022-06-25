@@ -52,6 +52,17 @@ export const AppStateProvider: React.FC = ({children}) => {
 
   }, [state])
 
+  React.useEffect(() => {
+    // if dark mode is enabled, set the body class to dark
+    if (state.settings.darkMode) {
+      document.body.classList.add('dark')
+    }
+    // if dark mode is disabled, remove the body class
+    else {
+      document.body.classList.remove('dark')
+    }
+  }, [state.settings.darkMode])
+
   return <AppStateContext.Provider value={{state, dispatch}}>
     {children}
   </AppStateContext.Provider>

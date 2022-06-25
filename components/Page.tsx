@@ -11,7 +11,7 @@ const Page: React.FC<PageProps> = (props) => {
   const { title, children } = props
 
   return <div className={styles.Page}>
-    <NoScrollLink href='game'>  
+    <NoScrollLink href='/'>  
         <a
           className={styles.back}
         >
