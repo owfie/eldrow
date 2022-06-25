@@ -23,17 +23,27 @@ export async function getServerSideProps() {
   const todayString = today.toFormat('yyyy-MM-dd')
   const tomorrow = today.plus({days: 1})
 
-  type word = { word: string }
+  type word = { word: string | undefined }
 
   const todayRef: DocumentReference<word> = doc(db, `words/${todayString}`) as DocumentReference<word>
  
-  const word = (await (await getDoc(todayRef)).data() as word).word
-  
-  return {
-    props: { firestoreWord: {
-      word: word,
-      date: todayString
-    }},
+  const response = ((await getDoc(todayRef)))
+
+  if (response.exists()) {
+    return {
+      props: {
+        firestoreWord: {
+          word: response.data().word,
+          date: todayString,
+        },
+      },
+    };
+  } else {
+    return {
+      props: { firestoreWord: {
+        date: todayString
+      }},
+    }
   }
 }
 
@@ -47,7 +57,7 @@ const Home: NextPage<HomeProps> = (props) => {
 
   const { state, dispatch } = React.useContext(AppStateContext)
 
-  const savedGame = state.loaded ? (state.gameHistory.find(g => g.date === firestoreWord.date)
+  const savedGame = (state.loaded && firestoreWord.word) ? (state.gameHistory.find(g => g.date === firestoreWord.date)
    ?? {
     gameOver: false,
     date: firestoreWord.date,
@@ -56,14 +66,21 @@ const Home: NextPage<HomeProps> = (props) => {
     solvedRetroactively: false
   } as SavedGame) : undefined
 
-  const [currentPage, setCurrentPage] = React.useState<page>('game')
+  const date = DateTime.fromFormat(firestoreWord.date, 'yyyy-MM-dd')
+  const dateString = date.toFormat('d MMMM')
 
   return (
     <Layout>
       <div className={styles.Home}>
         {
-          savedGame &&
+          savedGame ? (
           <Game savedGame={savedGame} />
+          ) : (
+            <div>
+              <h1>Uh oh.</h1>
+              <p>Looks like we couldn&apos;t find a word for today&apos;s date ({dateString}). Try again tomorrow?</p>
+            </div>
+          )
         }
       </div>
     </Layout>

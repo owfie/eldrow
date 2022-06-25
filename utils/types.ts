@@ -41,7 +41,7 @@ type attemptedLetter = {
 }
 
 type FirestoreWord = {
-  word: string
+  word?: string
   date: string
 }
 
