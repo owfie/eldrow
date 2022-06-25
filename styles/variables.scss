@@ -16,6 +16,10 @@ $dark-mode-elevated: #403B45;
   filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.4)); 
 }
 
+@mixin inner-shadow {
+  box-shadow: inset 0px 2px 2px 0px rgba(0, 0, 0, 0.6);
+}
+
 @mixin unselectable {
 
     -webkit-touch-callout: none; /* iOS Safari */

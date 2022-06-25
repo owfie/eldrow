@@ -21,6 +21,8 @@
 
 .Key {
   @include dark {
+    @include shadow;
+
     background-color: $dark-mode-dark;
     border-top: $dark-mode-elevated 2px solid;
     border-left: $dark-mode-elevated 2px solid;
@@ -50,7 +52,6 @@
     }
   }
 
-  @include shadow;
   @include unselectable;
 
   cursor: pointer;

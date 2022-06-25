@@ -1,3 +1,14 @@
+.ToggleFrame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+
+  label {
+    margin-left: 1em;
+  }
+}
+
 .Toggle {
   @include light {
     background-color: $light-mode-light;
@@ -14,11 +25,21 @@
   }
 
   @include dark {
-    background-color: $dark-mode-dark;
-    @include shadow;
+    background-color: $dark-mode-elevated;
+    width: 44px;
+    height: 26px;
+
+    @include inner-shadow;
 
     .inner {
+      width: 16px;
+      height: 16px;
+
+
+      left: 5px;
+      top: 5px;
       background-color: $dark-mode-light;
+      box-shadow: 0px 2px 2px 1px rgba(0, 0, 0, 0.4);
     }
 
     &.active {
@@ -49,7 +70,12 @@
     transition: background-color 0.1s linear;
 
     .inner {
-      left: 20px;
+      @include light {
+        left: 20px;
+      }
+      @include dark {
+        left: 22px;
+      }
       transition: left 0.1s ease-out;
     }
   }

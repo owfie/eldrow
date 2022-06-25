@@ -10,7 +10,6 @@ import { AppStateActionType } from "utils/appStateReducer"
 import styles from './About.module.scss'
 
 const About: NextPage = () => {
-  const { state, dispatch } = useContext(AppStateContext)
   
   return (
     <Layout>
@@ -49,15 +48,6 @@ const About: NextPage = () => {
             </div>  
           </div>
           <p><b>eldroW</b> is based on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> by <a href="https://www.powerlanguage.co.uk/">Josh Wardle</a>.</p>
-          <h2>Settings</h2>
-          <div className={styles.toggleBar}>
-            <Toggle checked={state.settings.hardMode} onClick={() => { dispatch && dispatch({ type: AppStateActionType.TOGGLE_HARD_MODE }) }}></Toggle>
-            <p>Hardcore Mode</p>
-          </div>
-          <div className={styles.toggleBar}>
-            <Toggle checked={state.settings.darkMode} onClick={() => { dispatch && dispatch({ type: AppStateActionType.TOGGLE_DARK_MODE }) }}></Toggle>
-            <p>Dark Mode</p>
-          </div>
           <br />
         </div>
       </Page>

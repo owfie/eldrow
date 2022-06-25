@@ -39,17 +39,20 @@
     align-items: center;
     text-decoration: none;
 
+    &> * {
+      margin-right: 2em;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
     a {
       cursor:pointer;
-      margin-right: 2em;
       text-decoration: none;
       
       &.active {
         text-decoration: underline;
-      }
-
-      &:last-of-type {
-        margin-right: 0;
       }
     }
   }

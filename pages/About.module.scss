@@ -2,18 +2,6 @@
   display: flex;
   flex-direction: column;
 
-  .toggleBar {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    p {
-      margin-left: 25px;
-    }
-
-    width: 200px;
-  }
-
   .hintContainer {
     display: flex;
     flex-direction: row;

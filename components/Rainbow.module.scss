@@ -9,29 +9,47 @@
     transition: height 0.05s linear;
 
     &:nth-child(1) {
-      background: $blue;
+      @include light {
+        background: $blue;
+      }
+
+      @include dark {
+        background: $orange;
+      }
 
       &.collapsed {
         height: 0px;
         transition: height 0.05s linear;
-
       }
     }
 
     &:nth-child(2) {
-      background: $green;
+      @include light {
+        background: $green;
+      }
+
+      @include dark {
+        background: $red;
+      }
+
       transition-delay: 0.05s;
 
       &.collapsed {
         height: 0px;
         transition: height 0.05s linear;
         transition-delay: 0.05s;
-
       }
     }
 
     &:nth-child(3) {
-      background: $yellow;
+      @include light {
+        background: $yellow;
+      }
+
+      @include dark {
+        background: $maroon;
+      }
+      
       transition-delay: 0.1s;
 
       &.collapsed {
@@ -42,21 +60,3 @@
     }
   }
 }
-
-// @keyframes collapse {
-//   from {
-//     height: 4px;
-//   }
-//   to {
-//     height: 0px;
-//   }
-// }
-
-// @keyframes expand {
-//   from {
-//     height: 0px;
-//   }
-//   to {
-//     height: 4px;
-//   }
-// }

@@ -1,18 +1,13 @@
 .HealthBar {
   font-size: 32px;
-
   display: flex;
   flex-direction: row;
   position: relative;
-
-  color: $blue;
   margin-bottom: 15px;
 
   .heart {
     @include light {
       @include text-outline;
-
-      color: $light-mode-dark;
 
       .used {
         color: $light-mode-dark;
@@ -20,9 +15,11 @@
     }
 
     @include dark {
-
+      @include shadow;
+      color: $dark-mode-elevated;
+      
       .used {
-        color: $dark-mode-dark;
+        color: $dark-mode-elevated;
       }
     }
 
@@ -36,6 +33,10 @@
       &:before {
         @include light {
           color: $yellow;
+          position: absolute;
+
+          top: -4px;
+          left: -2px;
         }
 
         @include dark {
@@ -44,9 +45,7 @@
 
         font-family: 'entypo', sans-serif;
         content: '♥';
-        position: absolute;
-        top: -4px;
-        left: -2px;
+
       }
     }
   }
