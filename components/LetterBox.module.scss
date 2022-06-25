@@ -37,22 +37,24 @@
 
     background-color: $dark-mode-dark;
     color: $dark-mode-light;
-    border: 4px solid $dark-mode-elevated;
-    border-bottom: 12px solid $dark-mode-elevated;
+
+    border: 4px solid;
+    border-bottom: 12px solid;
+    border-color: $dark-mode-light;
 
     &.yes {
-      background-color: $red;
-      color: $dark-mode-light;
+      color: $red;
+      border-color: $red;
     }
   
     &.almost {
-      background-color: $orange;
-      color: $dark-mode-light;
+      color: $orange;
+      border-color: $orange;
     }
   
     &.inactive {
-      background-color: $dark-mode-dark;
-      color: $dark-mode-light;
+      color: lighten($dark-mode-elevated, 10%);
+      border-color: $dark-mode-elevated;
     }
   }
 

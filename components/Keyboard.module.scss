@@ -24,18 +24,32 @@
     @include shadow;
 
     background-color: $dark-mode-dark;
-    border-top: $dark-mode-elevated 2px solid;
-    border-left: $dark-mode-elevated 2px solid;
-    border-bottom: $dark-mode-elevated 4px solid;
-    border-right: $dark-mode-elevated 4px solid;
+    border-width: 2px 4px 4px 2px;
+    border-style: solid;
+    border-color: $dark-mode-elevated;
+    color: $dark-mode-light;
+
+    &.inactive {
+      border-color: $dark-mode-elevated;
+      color: $dark-mode-elevated;
+    }
+  
+    &.yes {
+      border-color: $red;
+      color: $red;
+    }
+  
+    &.almost {
+      border-color: $orange;
+      color: $orange;
+    }
   }
 
   @include light {
     background-color: $light-mode-light;
-    border-top: $light-mode-dark 2px solid;
-    border-left: $light-mode-dark 2px solid;
-    border-bottom: $light-mode-dark 4px solid;
-    border-right: $light-mode-dark 4px solid;
+    border-width: 2px 4px 4px 2px;
+    border-style: solid;
+    border-color: $light-mode-dark;
     color: $light-mode-dark;
 
     &.inactive {
@@ -44,11 +58,11 @@
     }
   
     &.yes {
-      background-color: $red;
+      background-color: $green;
     }
   
     &.almost {
-      background-color: $orange;
+      background-color: $yellow;
     }
   }
 
