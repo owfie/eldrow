@@ -1,20 +1,26 @@
 .Hint {
-  background-color: $dark;
+  @include dark {
+    background-color: $dark-mode-light;
+    color: $dark-mode-dark
+  }
+
+  @include light {
+    background-color: $light-mode-dark;
+    color: $light-mode-light;
+  }
+
   @include shadow;
+
   position: absolute;
   top: 25px;
-  color: white;
   padding: 1.5em;
   z-index: 1;
-
   opacity: 1;
   transition: opacity 0.1s ease-in-out;
-
   border-radius: 3px;
 
   &.hidden {
     opacity: 0;
     transition: opacity 1s ease-in-out;
   }
-
 }

@@ -1,12 +1,10 @@
 .Chart {
   width: 100%;
-
   display: flex;
   flex-direction: row;
   margin-bottom: 1em;
 
   .axis {
-    
     .label {
       padding: 6px;
       margin-bottom: 2em;
@@ -15,32 +13,51 @@
         margin-top: 2em;
       }
     }
+
     padding-right: 2em;
-    border-right: 2px solid $dark;
+    @include light {
+      border-right: 2px solid $light-mode-dark;
+    }
+  
+    @include dark {
+      border-right: 2px solid $dark-mode-light;
+    }
   }
 
   .data {
-
     .row {
       padding-right: 1em;
       min-width: 3em;
-
       text-align: right;
-
-      &.active {
-        background-color: $dark;
-        color: $light;
-      }
-
       padding-top: 4px;
       padding-bottom: 4px;
-      background-color: $light;
-      border-top: 2px solid $dark;
-      border-bottom: 2px solid $dark;
-      border-right: 2px solid $dark;
-      color: $dark;
-
       margin-bottom: 2em;
+
+      @include light {
+        &.active {
+          background-color: $light-mode-dark;
+          color: $light-mode-light;
+        }
+
+        background-color: $light-mode-light;
+        border-top: 2px solid $light-mode-dark;
+        border-bottom: 2px solid $light-mode-dark;
+        border-right: 2px solid $light-mode-dark;
+        color: $light-mode-dark;
+      }
+
+      @include dark {
+        &.active {
+          background-color: $dark-mode-light;
+          color: $dark-mode-dark;
+        }
+
+        background-color: $dark-mode-dark;
+        border-top: 2px solid $dark-mode-light;
+        border-bottom: 2px solid $dark-mode-light;
+        border-right: 2px solid $dark-mode-light;
+        color: $dark-mode-dark;
+      }
 
       &:first-of-type {
         margin-top: 2em;

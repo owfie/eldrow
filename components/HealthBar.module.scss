@@ -9,29 +9,46 @@
   margin-bottom: 15px;
 
   .heart {
+    @include light {
+      @include text-outline;
+
+      color: $light-mode-dark;
+
+      .used {
+        color: $light-mode-dark;
+      }
+    }
+
+    @include dark {
+
+      .used {
+        color: $dark-mode-dark;
+      }
+    }
+
     font-family: 'entypo', sans-serif;
-    color: $dark;
     position: relative;
     margin-right: 0.1em;
   
     @include unselectable;
-    @include text-outline;
   
     &.active {
       &:before {
-        color: $yellow;
+        @include light {
+          color: $yellow;
+        }
+
+        @include dark {
+          color: $red;
+        }
+
         font-family: 'entypo', sans-serif;
-    
         content: '♥';
         position: absolute;
         top: -4px;
         left: -2px;
       }
     }
-  }
-
-  .used {
-    color: $dark;
   }
 }
 

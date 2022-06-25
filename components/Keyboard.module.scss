@@ -7,61 +7,63 @@
     display: flex;
     flex-direction: row;
     margin-top: 10px;
-
     max-width: 100vw;
-
   }
 }
 
 @mixin pressed {
   transform: scale(0.9);
-  // background-color: darken(white, 10%);
 }
 
 @mixin hover {
   // background-color: lighten($dark, 15%);
-
 }
 
 .Key {
-  @include shadow;
-  // @include outline;
-  @include unselectable;
-  cursor: pointer;
+  @include dark {
+    background-color: $dark-mode-dark;
+    border-top: $dark-mode-elevated 2px solid;
+    border-left: $dark-mode-elevated 2px solid;
+    border-bottom: $dark-mode-elevated 4px solid;
+    border-right: $dark-mode-elevated 4px solid;
+  }
 
+  @include light {
+    background-color: $light-mode-light;
+    border-top: $light-mode-dark 2px solid;
+    border-left: $light-mode-dark 2px solid;
+    border-bottom: $light-mode-dark 4px solid;
+    border-right: $light-mode-dark 4px solid;
+    color: $light-mode-dark;
+
+    &.inactive {
+      background-color: $light-mode-dark;
+      color: $light-mode-light;
+    }
+  
+    &.yes {
+      background-color: $red;
+    }
+  
+    &.almost {
+      background-color: $orange;
+    }
+  }
+
+  @include shadow;
+  @include unselectable;
+
+  cursor: pointer;
   font-weight: 600;
   font-size: 16px;
   width: 1em;
   padding: 1em;
-
   text-transform: capitalize;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background-color: $light;
-  color: $dark;
-  // border: 2px solid white;
   border-radius: 8px;
-  // @include outline;
-  border-top: $dark 2px solid;
-  border-left: $dark 2px solid;
-  border-bottom: $dark 4px solid;
-  border-right: $dark 4px solid;
-
-  &.inactive {
-    background-color: $dark;
-    color: $light;
-  }
-
-  &.yes {
-    background-color: $yes;
-  }
-
-  &.almost {
-    background-color: $almost;
-  }
+  margin-right: 0.5em;
 
   &:active {
     @include pressed;
@@ -70,14 +72,12 @@
   &.active {
     @include hover;
     @include pressed;
-
   }
 
   &:hover {
     @include hover;
   }
 
-  margin-right: 0.5em;
   &:last-child {
     margin-right: 0;
   }
@@ -86,10 +86,5 @@
     height: 3em;
     font-size: 14px;
     font-weight: 700;
-    // width: 1em;
-    // height: 1em;
-    // padding: 1em;
-    // border-radius: 2em;
-    // margin-right: 0.2em;
   }
 }

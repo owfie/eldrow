@@ -5,11 +5,6 @@ $yellow: #FFDF39;
 $green: #BCE80C;
 $blue: #20BDA1;
 
-
-$yes: $green;
-$almost: $yellow;
-$inactive: #b8c5c5b2;
-
 $light-mode-dark: #2A272D;
 $light-mode-light: #FFFFF6;
 
@@ -17,12 +12,8 @@ $dark-mode-light: #EAEEF4;
 $dark-mode-dark: #2A272D;
 $dark-mode-elevated: #403B45;
 
-
-$dark: $light-mode-dark;
-$light: $light-mode-light;
-
 @mixin shadow {
-  filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.15)); 
+  filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.4)); 
 }
 
 @mixin unselectable {
@@ -38,13 +29,31 @@ $light: $light-mode-light;
 }
 
 @mixin text-outline {
-  -webkit-text-stroke: $dark 2px;
+  -webkit-text-stroke: $light-mode-dark 2px;
 }
 
 @mixin outline {
-  outline: 2px solid $dark;
+  outline: 2px solid $light-mode-dark;
 }
 
 @mixin outline-subtle {
-  outline: 1px solid $dark;
+  outline: 1px solid $light-mode-dark;
+}
+
+@mixin dark {
+   &[data-theme="dark"] {
+    @content;
+  }
+  [data-theme="dark"] & {
+    @content;
+  }
+}
+
+@mixin light {
+  &[data-theme="light"] {
+    @content;
+  }
+  [data-theme="light"] & {
+    @content;
+  }
 }
