@@ -8,6 +8,7 @@ import styles from "./Header.module.scss"
 import { Toggle } from "./Toggle"
 import { AppStateContext } from "utils/appState"
 import { AppStateActionType } from "utils/appStateReducer"
+import { AnimatePresence, motion } from "framer-motion"
 
 export const Header: React.FC = () => {
 
@@ -51,8 +52,18 @@ export const Header: React.FC = () => {
         <NoScrollLink href="/about">
           <a className={`${currentPage === "/about" && styles.active}`}>About</a>
         </NoScrollLink>
-        <Toggle label="Hardcore" checked={state.settings.hardMode} onClick={() => { dispatch && dispatch({ type: AppStateActionType.TOGGLE_HARD_MODE }) }}></Toggle>
-        <Toggle label="Dark" checked={state.settings.darkMode} onClick={() => { dispatch && dispatch({ type: AppStateActionType.TOGGLE_DARK_MODE }) }}></Toggle>
+        <motion.button
+          className={styles.themeButton}
+          whileHover={{
+            scale: 1.1,
+            transition: { duration: 0.5 },
+          }}
+          whileTap={{ scale: 0.9, rotate: 180 }}
+          animate={{ rotate: 360 }}
+          onClick={() => { dispatch && dispatch({ type: AppStateActionType.TOGGLE_DARK_MODE })}}
+        >
+          {state.settings.darkMode ? '🌙' : '🌞'}
+        </motion.button>
       </nav>
       <div className={`${styles.divider}`}>
         <Rainbow collapsed={currentPage === "/"} revealDirection="right" />
