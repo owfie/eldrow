@@ -21,13 +21,13 @@
 
 .Key {
   @include dark {
-    @include shadow;
+    // @include shadow;
 
     background-color: $dark-mode-dark;
     border-width: 2px 4px 4px 2px;
     border-style: solid;
-    border-color: $dark-mode-elevated;
-    color: $dark-mode-light;
+    border-color: $dark-mode-darker;
+    color: $dark-mode-darker;
 
     &.inactive {
       border-color: $dark-mode-elevated;

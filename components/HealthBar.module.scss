@@ -4,49 +4,62 @@
   flex-direction: row;
   position: relative;
   margin-bottom: 15px;
+}
 
-  .heart {
+.heart {
+  @include light {
+    @include text-outline($light-mode-dark);
+
+    &.used {
+      color: $light-mode-dark;
+    }
+  }
+
+  @include dark {    
+    // @include shadow;
+    @include text-outline($dark-mode-darker);
+
+    &:before {
+      // display: none;
+    }
+
+    &.used {
+      color: $dark-mode-darker;
+    }
+  }
+
+  font-family: 'entypo', sans-serif;
+  position: relative;
+  margin-right: 0.1em;
+
+  @include unselectable;
+
+  &.active {
+    font-family: 'entypo', sans-serif;
+
     @include light {
-      @include text-outline;
+      color: $light-mode-dark;
 
-      .used {
-        color: $light-mode-dark;
+      &:before {
+      color: $yellow;
       }
     }
 
     @include dark {
-      @include shadow;
-      color: $dark-mode-elevated;
-      
-      .used {
-        color: $dark-mode-elevated;
+      color: $dark-mode-darker;
+
+      &:before {
+      color: $red;
+        
       }
     }
 
-    font-family: 'entypo', sans-serif;
-    position: relative;
-    margin-right: 0.1em;
-  
-    @include unselectable;
-  
-    &.active {
-      &:before {
-        @include light {
-          color: $yellow;
-          position: absolute;
+    &:before {
+      position: absolute;
 
-          top: -4px;
-          left: -2px;
-        }
-
-        @include dark {
-          color: $red;
-        }
-
-        font-family: 'entypo', sans-serif;
-        content: '♥';
-
-      }
+      top: -4px;
+      left: -2px;
+      content: '♥';
     }
   }
 }

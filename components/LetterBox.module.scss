@@ -5,7 +5,7 @@
   @include unselectable;
 
   @include light {
-    @include outline;
+    @include outline ($light-mode-dark);
 
     background-color: $light-mode-dark;
     color: $light-mode-light;
@@ -13,7 +13,7 @@
     border-bottom: 12px solid $light-mode-light;
 
     .inside {
-      @include outline-subtle;
+      @include outline-subtle ($light-mode-dark);
     }
 
     &.yes {
@@ -34,6 +34,7 @@
   
   @include dark {
     @include shadow;
+    // @include outline ($dark-mode-darker);
 
     background-color: $dark-mode-dark;
     color: $dark-mode-light;
@@ -41,6 +42,10 @@
     border: 4px solid;
     border-bottom: 12px solid;
     border-color: $dark-mode-light;
+
+    .inside {
+      // @include outline-subtle ($dark-mode-darker);
+    }
 
     &.yes {
       color: $red;
@@ -53,7 +58,7 @@
     }
   
     &.inactive {
-      color: lighten($dark-mode-elevated, 10%);
+      color: lighten($dark-mode-elevated, 0%);
       border-color: $dark-mode-elevated;
     }
   }
@@ -70,6 +75,15 @@
 
   &.yes {
     cursor: default;
+
+    &:before {
+      content: '✓';
+      font-size: 0.6em;
+      font-family: 'Inter' ;
+      position: absolute;
+      right: 4px;
+      bottom: 0;
+    }
   }
 
   &.no {
@@ -78,6 +92,15 @@
 
   &.almost {
     cursor: default;
+
+    &:before {
+      content: '?';
+      font-size: 0.6em;
+      font-family: 'Inter' ;
+      position: absolute;
+      right: 2px;
+      bottom: 0;
+    }
   }
 
   .inside {
